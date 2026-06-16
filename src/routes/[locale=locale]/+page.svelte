@@ -32,30 +32,32 @@
 	</div>
 
 	<div class="mt-24">
-		<Heading level={2} size="2xl" class="mb-8 text-center">{t('home.features.title')}</Heading>
-		<div class="grid gap-6 md:grid-cols-2 lg:grid-cols-4">
+		<Heading level={2} size="2xl" class="mb-12 text-center">{t('home.features.title')}</Heading>
+		<div class="grid gap-8 md:grid-cols-2">
 			{#each features as f}
-				<Card>
-					<h3 class="font-semibold text-fg">{f.title}</h3>
-					<p class="mt-2 text-sm text-fg-muted">{f.desc}</p>
+				<Card padding="lg" class="border-border hover:border-primary transition-colors">
+					<h3 class="text-xl font-semibold text-fg">{f.title}</h3>
+					<p class="mt-3 text-fg-muted">{f.desc}</p>
 				</Card>
 			{/each}
 		</div>
 	</div>
 
 	<div class="mt-24">
-		<Heading level={2} size="2xl" class="mb-8 text-center">Pricing</Heading>
-		<div class="grid gap-6 md:grid-cols-3">
+		<Heading level={2} size="2xl" class="mb-12 text-center">Pricing</Heading>
+		<div class="grid gap-8 md:grid-cols-3 items-stretch">
 			{#each pricing as p}
-				<Card padding="lg" shadow={true}>
-					{#if p.popular}
-						<span class="mb-2 inline-block rounded-full bg-primary/10 px-3 py-1 text-xs font-medium text-primary">Popular</span>
-					{/if}
-					<h3 class="text-xl font-semibold text-fg">{p.name}</h3>
-					<p class="mt-1 text-3xl font-bold text-fg">{p.price}</p>
-					<p class="mt-2 text-sm text-fg-muted">{p.desc}</p>
-					<div class="mt-6">
-						<Button variant={p.popular ? 'primary' : 'secondary'} class="w-full">{p.cta}</Button>
+				<Card padding="lg" shadow={true} class="flex flex-col border-border">
+					<div class="flex-grow">
+						{#if p.popular}
+							<span class="mb-4 inline-block rounded-full bg-primary/10 px-3 py-1 text-xs font-semibold text-primary uppercase tracking-wide">Popular</span>
+						{/if}
+						<h3 class="text-2xl font-bold text-fg">{p.name}</h3>
+						<p class="mt-4 text-4xl font-extrabold text-fg">{p.price}</p>
+						<p class="mt-4 text-fg-muted leading-relaxed">{p.desc}</p>
+					</div>
+					<div class="mt-8">
+						<Button variant={p.popular ? 'primary' : 'secondary'} class="w-full justify-center">{p.cta}</Button>
 					</div>
 				</Card>
 			{/each}
