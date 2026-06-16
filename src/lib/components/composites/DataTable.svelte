@@ -104,7 +104,7 @@
 						{#if col.sortable}
 							<button
 								onclick={() => handleSort(col.key)}
-								class="font-medium text-fg-muted hover:text-fg"
+								class="cursor-pointer font-medium text-fg-muted hover:text-fg"
 								aria-label="Sort by {col.label}{sortBy === col.key ? ', currently ' + sortDir + 'ending' : ''}"
 							>
 								{col.label}{getSortIndicator(col.key)}
@@ -197,10 +197,10 @@
 				{@const p = i + 1}
 				<button
 					onclick={() => onpage?.(p)}
-					class={[
-						'h-8 w-8 rounded-md text-sm font-medium transition-colors',
-						p === page ? 'bg-primary text-fg-inverse' : 'text-fg-muted hover:bg-bg-muted hover:text-fg'
-					].join(' ')}
+				class={[
+					'h-8 w-8 cursor-pointer rounded-md text-sm font-medium transition-colors',
+					p === page ? 'bg-primary text-fg-inverse' : 'text-fg-muted hover:bg-bg-muted hover:text-fg'
+				].join(' ')}
 					aria-label="Page {p}"
 					aria-current={p === page ? 'page' : undefined}
 				>

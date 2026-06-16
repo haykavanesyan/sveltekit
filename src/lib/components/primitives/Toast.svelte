@@ -22,7 +22,7 @@
 				].join(' ')}
 			>
 				<span class="flex-1">{msg.text}</span>
-				<button onclick={() => dismiss(msg.id)} class="text-current opacity-70 hover:opacity-100">&times;</button>
+				<button onclick={() => dismiss(msg.id)} class="cursor-pointer text-current opacity-70 hover:opacity-100">&times;</button>
 			</div>
 		{/each}
 	</div>

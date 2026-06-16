@@ -150,7 +150,7 @@
 			aria-activedescendant={activeIdx >= 0 ? `${selectId}-opt-${activeIdx}` : undefined}
 			onclick={toggle}
 			onkeydown={onKeydown}
-			class="flex h-10 w-full items-center justify-between rounded-md border border-border bg-bg px-3 text-sm text-fg transition-colors hover:border-fg-muted focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-border-focus disabled:cursor-not-allowed disabled:opacity-50"
+			class="flex h-10 w-full cursor-pointer items-center justify-between rounded-md border border-border bg-bg px-3 text-sm text-fg transition-colors hover:border-fg-muted focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-border-focus disabled:cursor-not-allowed disabled:opacity-50"
 		>
 			<span class={[displayLabel ? 'text-fg' : 'text-fg-muted'].filter(Boolean).join(' ')}>
 				{displayLabel || 'Select…'}
@@ -182,7 +182,7 @@
 				role="option"
 				id={`${selectId}-opt-${i}`}
 				aria-selected={opt.value === value}
-				class="flex w-full items-center gap-2 whitespace-nowrap px-3 py-2 text-left text-sm transition-colors {opt.value === value ? 'bg-primary/10 text-primary' : 'text-fg hover:bg-bg-muted'} {i === activeIdx ? 'bg-bg-muted' : ''}"
+				class="flex w-full cursor-pointer items-center gap-2 whitespace-nowrap px-3 py-2 text-left text-sm transition-colors {opt.value === value ? 'bg-primary/10 text-primary' : 'text-fg hover:bg-bg-muted'} {i === activeIdx ? 'bg-bg-muted' : ''}"
 				onclick={() => select(opt.value)}
 				onmouseenter={() => (activeIdx = i)}
 			>

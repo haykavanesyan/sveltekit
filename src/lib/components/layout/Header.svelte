@@ -27,7 +27,7 @@
 					{t('nav.dashboard')}
 				</a>
 				<form action="/{locale}/logout" method="post">
-					<button type="submit" class="text-sm text-fg-muted hover:text-fg">{t('nav.logout')}</button>
+					<button type="submit" class="cursor-pointer text-sm text-fg-muted hover:text-fg">{t('nav.logout')}</button>
 				</form>
 			{:else}
 				<a href="/{locale}/login" class="text-sm font-medium text-primary hover:text-primary-hover">
@@ -35,7 +35,7 @@
 				</a>
 			{/if}
 			<button
-				class="inline-flex items-center md:hidden"
+				class="inline-flex cursor-pointer items-center md:hidden"
 				onclick={() => (menuOpen = !menuOpen)}
 				aria-label="Toggle navigation menu"
 				aria-expanded={menuOpen}

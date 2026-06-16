@@ -16,7 +16,7 @@
 	{type}
 	{disabled}
 	class={[
-		'inline-flex items-center justify-center rounded-md font-medium transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-border-focus disabled:pointer-events-none disabled:opacity-50',
+		'inline-flex cursor-pointer items-center justify-center rounded-md font-medium transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-border-focus disabled:pointer-events-none disabled:opacity-50',
 		variant === 'primary' && 'bg-primary text-fg-inverse hover:bg-primary-hover',
 		variant === 'secondary' && 'border border-border bg-bg text-fg hover:bg-bg-muted',
 		variant === 'ghost' && 'text-fg hover:bg-bg-muted',

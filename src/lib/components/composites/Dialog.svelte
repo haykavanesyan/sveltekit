@@ -58,7 +58,7 @@
 				<h2 id={titleId} class="text-lg font-semibold text-fg">{title || 'Dialog'}</h2>
 				<button
 					onclick={onclose}
-					class="rounded-md p-1 text-fg-muted hover:bg-bg-muted hover:text-fg"
+					class="cursor-pointer rounded-md p-1 text-fg-muted hover:bg-bg-muted hover:text-fg"
 					aria-label="Close dialog"
 				>
 					<svg class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">

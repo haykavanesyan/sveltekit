@@ -60,7 +60,7 @@
 				onkeydown={handleKeydown}
 			/>
 		</div>
-		<button onclick={() => updateUrl(true)} class="rounded-md bg-primary px-4 text-sm font-medium text-fg-inverse transition-colors hover:bg-primary/90">
+		<button onclick={() => updateUrl(true)} class="cursor-pointer rounded-md bg-primary px-4 text-sm font-medium text-fg-inverse transition-colors hover:bg-primary/90">
 			Search
 		</button>
 		<Select

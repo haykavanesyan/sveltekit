@@ -26,7 +26,7 @@
 		<button
 			onclick={() => onpage?.(page - 1)}
 			disabled={page <= 1}
-			class="inline-flex h-9 items-center justify-center rounded-md px-3 text-sm font-medium transition-colors disabled:pointer-events-none disabled:opacity-50 border border-border bg-bg text-fg hover:bg-bg-muted"
+			class="inline-flex h-9 cursor-pointer items-center justify-center rounded-md px-3 text-sm font-medium transition-colors disabled:pointer-events-none disabled:opacity-50 border border-border bg-bg text-fg hover:bg-bg-muted"
 			aria-label="Previous page"
 		>
 			&lsaquo; Prev
@@ -36,7 +36,7 @@
 			<button
 				onclick={() => onpage?.(p)}
 				class={[
-					'h-9 w-9 rounded-md text-sm font-medium transition-colors',
+					'h-9 w-9 cursor-pointer rounded-md text-sm font-medium transition-colors',
 					p === page ? 'bg-primary text-fg-inverse' : 'text-fg-muted hover:bg-bg-muted hover:text-fg'
 				].join(' ')}
 				aria-label="Page {p}"
@@ -49,7 +49,7 @@
 		<button
 			onclick={() => onpage?.(page + 1)}
 			disabled={page >= totalPages}
-			class="inline-flex h-9 items-center justify-center rounded-md px-3 text-sm font-medium transition-colors disabled:pointer-events-none disabled:opacity-50 border border-border bg-bg text-fg hover:bg-bg-muted"
+			class="inline-flex h-9 cursor-pointer items-center justify-center rounded-md px-3 text-sm font-medium transition-colors disabled:pointer-events-none disabled:opacity-50 border border-border bg-bg text-fg hover:bg-bg-muted"
 			aria-label="Next page"
 		>
 			Next &rsaquo;
