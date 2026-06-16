@@ -1,0 +1,48 @@
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+
+permissions:
+  contents: read
+  checks: write
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+
+      - run: npm ci
+
+      - run: npm run lint
+
+      - run: npx svelte-kit sync && npx svelte-check --tsconfig ./tsconfig.json
+
+      - run: npm run test:unit
+
+      - run: npm run build
+
+      - run: npx playwright install --with-deps chromium
+      - run: npm run test:e2e
+
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: playwright-report
+          path: playwright-report/
+          retention-days: 7
+
+      - name: Lighthouse CI
+        run: |
+          npx lhci autorun --collect.staticDistDir=./build --collect.url=http://localhost:4173/en --collect.url=http://localhost:4173/en/blog --collect.url=http://localhost:4173/en/login --upload.target=temporary-public-storage || echo "Lighthouse CI failed"
+
+      - run: npm run size

@@ -1,0 +1,42 @@
+<script lang="ts">
+	let { label, error, value = $bindable(''), placeholder = '', type = 'text', name, id, oninput, onblur, ...rest }: {
+		label?: string;
+		error?: string;
+		value?: string | number;
+		placeholder?: string;
+		type?: string;
+		name?: string;
+		id?: string;
+		oninput?: (e: Event) => void;
+		onblur?: (e: FocusEvent) => void;
+	} = $props();
+
+	const inputId = id || name || label?.toLowerCase().replace(/\s+/g, '-');
+	const errorId = inputId + '-error';
+</script>
+
+<div class="flex flex-col gap-1.5">
+	{#if label}
+		<label for={inputId} class="text-sm font-medium text-fg">{label}</label>
+	{/if}
+	<input
+		{type}
+		{name}
+		{placeholder}
+		bind:value
+		id={inputId}
+		aria-invalid={!!error}
+		aria-describedby={error ? errorId : undefined}
+		class={[
+			'h-10 w-full rounded-md border bg-bg px-3 py-2 text-sm text-fg placeholder:text-fg-muted transition-colors',
+			'focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-border-focus',
+			error ? 'border-danger' : 'border-border'
+		].join(' ')}
+		{...rest}
+		{oninput}
+		{onblur}
+	/>
+	{#if error}
+		<p id={errorId} class="text-sm text-danger" role="alert">{error}</p>
+	{/if}
+</div>
