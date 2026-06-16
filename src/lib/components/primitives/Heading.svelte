@@ -1,7 +1,8 @@
 <script lang="ts">
-	let { level = 1, size, children, ...rest }: {
+	let { level = 1, size, class: className = '', children, ...rest }: {
 		level?: 1 | 2 | 3 | 4 | 5 | 6;
 		size?: 'xs' | 'sm' | 'md' | 'lg' | 'xl' | '2xl' | '3xl';
+		class?: string;
 		children?: import('svelte').Snippet;
 	} = $props();
 
@@ -22,8 +23,9 @@
 	this={tag}
 	class={[
 		'font-semibold text-fg',
-		size ? sizes[size] : level === 1 ? 'text-3xl' : level === 2 ? 'text-2xl' : level === 3 ? 'text-xl' : level === 4 ? 'text-lg' : 'text-base'
-	].join(' ')}
+		size ? sizes[size] : level === 1 ? 'text-3xl' : level === 2 ? 'text-2xl' : level === 3 ? 'text-xl' : level === 4 ? 'text-lg' : 'text-base',
+		className
+	].filter(Boolean).join(' ')}
 	{...rest}
 >
 	{@render children?.()}

@@ -1,7 +1,8 @@
 <script lang="ts">
-	let { padding = 'md', shadow = true, children, ...rest }: {
+	let { padding = 'md', shadow = true, class: className = '', children, ...rest }: {
 		padding?: 'none' | 'sm' | 'md' | 'lg';
 		shadow?: boolean;
+		class?: string;
 		children?: import('svelte').Snippet;
 	} = $props();
 </script>
@@ -13,8 +14,9 @@
 		padding === 'none' && 'p-0',
 		padding === 'sm' && 'p-3',
 		padding === 'md' && 'p-4',
-		padding === 'lg' && 'p-6'
-	].join(' ')}
+		padding === 'lg' && 'p-6',
+		className
+	].filter(Boolean).join(' ')}
 	{...rest}
 >
 	{@render children?.()}

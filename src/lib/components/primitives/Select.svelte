@@ -1,10 +1,11 @@
 <script lang="ts">
-	let { label, value = $bindable(''), options, name, id, onchange, placeholder, ...rest }: {
+	let { label, value = $bindable(''), options, name, id, class: className = '', onchange, placeholder, ...rest }: {
 		label?: string;
 		value?: string;
 		options: { value: string; label: string }[];
 		name?: string;
 		id?: string;
+		class?: string;
 		onchange?: (e: Event) => void;
 		placeholder?: string;
 	} = $props();
@@ -12,7 +13,7 @@
 	const selectId = id || name || label?.toLowerCase().replace(/\s+/g, '-');
 </script>
 
-<div class="flex flex-col gap-1.5">
+<div class={['flex flex-col gap-1.5', className].filter(Boolean).join(' ')}>
 	{#if label}
 		<label for={selectId} class="text-sm font-medium text-fg">{label}</label>
 	{/if}

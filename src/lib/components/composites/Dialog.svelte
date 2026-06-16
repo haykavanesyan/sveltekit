@@ -44,6 +44,7 @@
 		role="dialog"
 		aria-modal="true"
 		aria-labelledby={titleId}
+		tabindex="-1"
 		onkeydown={handleKeydown}
 		onclick={handleBackdropClick}
 		bind:this={dialogEl}

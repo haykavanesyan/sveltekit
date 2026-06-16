@@ -7,7 +7,6 @@
 	import SeoHead from '$lib/components/layout/SeoHead.svelte';
 	import { getT } from '$lib/i18n/runtime';
 	import { formatDate } from '$lib/utils/formatters';
-	import { page } from '$app/stores';
 	import { goto } from '$app/navigation';
 	import type { Post } from '$lib/schemas/post';
 	import type { Tag } from '$lib/schemas/tag';
@@ -33,6 +32,10 @@
 		const tag = data.tags.find((t) => t.slug === slug);
 		return tag ? tag.label[locale] : slug;
 	}
+
+	function handleKeydown(e: KeyboardEvent) {
+		if (e.key === 'Enter') updateUrl();
+	}
 </script>
 
 <SeoHead
@@ -51,12 +54,15 @@
 				name="q"
 				placeholder={t('search.placeholder')}
 				bind:value={query}
-				oninput={updateUrl}
+				onkeydown={handleKeydown}
 			/>
 		</div>
+		<button onclick={updateUrl} class="rounded-md bg-primary px-4 text-sm font-medium text-fg-inverse transition-colors hover:bg-primary/90">
+			Search
+		</button>
 		<Select
 			name="tag"
-			options={[{ value: '', label: 'All tags' }, ...tags.map(t => ({ value: t.slug, label: getTagLabel(t.slug) }))]}
+			options={[{ value: '', label: 'All tags' }, ...data.tags.map(t => ({ value: t.slug, label: getTagLabel(t.slug) }))]}
 			bind:value={activeTag}
 			onchange={updateUrl}
 		/>
@@ -85,7 +91,7 @@
 		{#each data.posts as post}
 			<a href="/{locale}/blog/{post.slug}" class="block transition-opacity hover:opacity-90">
 				<Card padding="none" class="h-full overflow-hidden">
-					<div class="h-40" style="background-color: {post.coverColor}"></div>
+					<div class="h-20" style="background-color: {post.coverColor}"></div>
 					<div class="p-4">
 						<div class="flex flex-wrap gap-2">
 							{#each post.tags as tag}

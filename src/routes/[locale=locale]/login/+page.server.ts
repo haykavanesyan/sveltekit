@@ -1,6 +1,7 @@
 import { LoginSchema } from '$lib/schemas/auth';
 import { verifyCredentials, createSession } from '$lib/server/api/auth';
 import { fail, redirect } from '@sveltejs/kit';
+import { dev } from '$app/environment';
 import type { Actions, PageServerLoad } from './$types';
 
 export const prerender = false;
@@ -32,7 +33,7 @@ export const actions: Actions = {
 			path: '/',
 			httpOnly: true,
 			sameSite: 'lax',
-			secure: process.env.NODE_ENV === 'production',
+			secure: !dev,
 			maxAge: 60 * 60 * 24
 		});
 

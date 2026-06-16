@@ -1,6 +1,7 @@
 <script lang="ts">
-	let { size = 'lg', children, ...rest }: {
-		size?: 'sm' | 'md' | 'lg' | 'xl';
+	let { size = 'lg', class: className = '', children, ...rest }: {
+		size?: 'sm' | 'md' | 'lg' | 'xl' | 'full';
+		class?: string;
 		children?: import('svelte').Snippet;
 	} = $props();
 </script>
@@ -11,8 +12,10 @@
 		size === 'sm' && 'max-w-3xl',
 		size === 'md' && 'max-w-5xl',
 		size === 'lg' && 'max-w-7xl',
-		size === 'xl' && 'max-w-[90rem]'
-	].join(' ')}
+		size === 'xl' && 'max-w-[90rem]',
+		size === 'full' && 'max-w-none',
+		className
+	].filter(Boolean).join(' ')}
 	{...rest}
 >
 	{@render children?.()}

@@ -6,8 +6,9 @@ import type { PageServerLoad, EntryGenerator } from './$types';
 export const prerender = true;
 
 export function entries(): ReturnType<EntryGenerator> {
-	const slugs: { slug: string; locale: string }[] = [];
-	for (const locale of ['en', 'de']) {
+	const slugs: { slug: string; locale: 'en' | 'de' }[] = [];
+	const locales = ['en', 'de'] as const;
+	for (const locale of locales) {
 		for (const post of posts) {
 			slugs.push({ slug: post.slug, locale });
 		}
@@ -15,8 +16,8 @@ export function entries(): ReturnType<EntryGenerator> {
 	return slugs;
 }
 
-export function load({ params }) {
-	const post = getBySlug(params.slug, params.locale);
+export function load({ params }: { params: { slug: string; locale: string } }) {
+	const post = getBySlug(params.slug);
 	if (!post) {
 		throw error(404, 'Not found');
 	}

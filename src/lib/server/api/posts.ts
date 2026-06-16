@@ -25,13 +25,30 @@ export function getBySlug(slug: string): Post | undefined {
 	return posts.find((p) => p.slug === slug);
 }
 
+export type PageResult = {
+	items: Post[];
+	page: number;
+	totalPages: number;
+	total: number;
+};
+
+export function getPage(locale: string, page: number, perPage: number = 6): PageResult {
+	const filtered = getAll(locale);
+	const total = filtered.length;
+	const totalPages = Math.max(1, Math.ceil(total / perPage));
+	const start = (page - 1) * perPage;
+	const items = filtered.slice(start, start + perPage);
+	return { items, page, totalPages, total };
+}
+
 export function search(params: SearchParams): SearchResult {
 	let filtered = [...posts];
 	const { q, tag, sort, cursor, limit = 6 } = params;
 	if (q) {
 		const lower = q.toLowerCase();
 		filtered = filtered.filter((p) => {
-			const en = p.translations.en;
+			const en = p.translations['en'];
+			if (!en) return false;
 			return en.title.toLowerCase().includes(lower) || en.excerpt.toLowerCase().includes(lower);
 		});
 	}

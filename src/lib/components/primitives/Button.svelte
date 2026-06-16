@@ -1,11 +1,13 @@
 <script lang="ts">
-	let { variant = 'primary', size = 'md', disabled = false, loading = false, type = 'button', onclick, children, ...rest }: {
+	let { variant = 'primary', size = 'md', disabled = false, loading = false, type = 'button', onclick, ariaLabel, class: className = '', children, ...rest }: {
 		variant?: 'primary' | 'secondary' | 'ghost' | 'danger';
 		size?: 'sm' | 'md' | 'lg';
 		disabled?: boolean;
 		loading?: boolean;
 		type?: 'button' | 'submit';
 		onclick?: (e: MouseEvent) => void;
+		ariaLabel?: string;
+		class?: string;
 		children?: import('svelte').Snippet;
 	} = $props();
 </script>
@@ -21,8 +23,10 @@
 		variant === 'danger' && 'bg-danger text-white hover:opacity-90',
 		size === 'sm' && 'h-8 px-3 text-sm',
 		size === 'md' && 'h-10 px-4 text-sm',
-		size === 'lg' && 'h-12 px-6 text-base'
-	].join(' ')}
+		size === 'lg' && 'h-12 px-6 text-base',
+		className
+	].filter(Boolean).join(' ')}
+	aria-label={ariaLabel}
 	{...rest}
 	{onclick}
 >

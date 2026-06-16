@@ -12,7 +12,7 @@
 	const t = getT();
 	const post = data.post;
 	const locale = data.locale as 'en' | 'de';
-	const translation = post.translations[locale];
+	const translation = post.translations[locale] || post.translations['en'] || { title: post.slug, excerpt: '', body: '' };
 
 	function getTagLabel(slug: string): string {
 		const tag = data.tags.find((t) => t.slug === slug);

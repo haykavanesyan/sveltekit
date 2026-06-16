@@ -189,7 +189,7 @@
 				size="sm"
 				disabled={page <= 1}
 				onclick={() => onpage?.(page - 1)}
-				aria-label="Previous page"
+				ariaLabel="Previous page"
 			>
 				&lsaquo; Prev
 			</Button>
@@ -212,7 +212,7 @@
 				size="sm"
 				disabled={page >= totalPages}
 				onclick={() => onpage?.(page + 1)}
-				aria-label="Next page"
+				ariaLabel="Next page"
 			>
 				Next &rsaquo;
 			</Button>

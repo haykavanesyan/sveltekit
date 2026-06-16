@@ -6,30 +6,21 @@
 	import SeoHead from '$lib/components/layout/SeoHead.svelte';
 	import { getT } from '$lib/i18n/runtime';
 	import { formatDate } from '$lib/utils/formatters';
-	import { page } from '$app/stores';
+	import { goto } from '$app/navigation';
 	import type { Post } from '$lib/schemas/post';
 	import type { Tag } from '$lib/schemas/tag';
 
-	let { data }: { data: { posts: Post[]; nextCursor: string | null; total: number; locale: string; tags: Tag[] } } = $props();
+	let { data }: { data: { items: Post[]; page: number; totalPages: number; total: number; locale: string; tags: Tag[] } } = $props();
 
 	const t = getT();
-	let posts = $state(data.posts);
-	let cursor = $state(data.nextCursor);
-	let loading = $state(false);
 
-	async function loadMore() {
-		if (!cursor || loading) return;
-		loading = true;
-		const res = await fetch(`/api/posts?cursor=${cursor}`);
-		const json = await res.json();
-		posts = [...posts, ...json.posts];
-		cursor = json.nextCursor;
-		loading = false;
+	function goToPage(p: number) {
+		goto(`/${data.locale}/blog?page=${p}`, { replaceState: true, keepFocus: true });
 	}
 
 	function getTagLabel(slug: string): string {
 		const tag = data.tags.find((t) => t.slug === slug);
-		return tag ? tag.label[data.locale] : slug;
+		return tag ? tag.label[data.locale as 'en' | 'de'] : slug;
 	}
 </script>
 
@@ -43,15 +34,15 @@
 <Container size="lg" class="py-12">
 	<h1 class="text-3xl font-bold text-fg">{t('blog.title')}</h1>
 
-	{#if posts.length === 0}
+	{#if data.items.length === 0}
 		<p class="mt-8 text-fg-muted">{t('blog.empty')}</p>
 	{/if}
 
 	<div class="mt-8 grid gap-6 md:grid-cols-2 lg:grid-cols-3">
-		{#each posts as post}
+		{#each data.items as post}
 			<a href="/{data.locale}/blog/{post.slug}" class="block transition-opacity hover:opacity-90">
 				<Card padding="none" class="h-full overflow-hidden">
-					<div class="h-40" style="background-color: {post.coverColor}"></div>
+					<div class="h-20" style="background-color: {post.coverColor}"></div>
 					<div class="p-4">
 						<div class="flex flex-wrap gap-2">
 							{#each post.tags as tag}
@@ -73,11 +64,42 @@
 		{/each}
 	</div>
 
-	{#if cursor}
-		<div class="mt-8 text-center">
-			<Button onclick={loadMore} loading={loading}>
-				{t('blog.readMore')}
+	{#if data.totalPages > 1}
+		<nav class="mt-8 flex items-center justify-center gap-2" aria-label="Blog pagination">
+			<Button
+				variant="secondary"
+				size="sm"
+				disabled={data.page <= 1}
+				onclick={() => goToPage(data.page - 1)}
+				ariaLabel="Previous page"
+			>
+				&lsaquo; Prev
 			</Button>
-		</div>
+
+			{#each { length: data.totalPages } as _, i}
+				{@const p = i + 1}
+				<button
+					onclick={() => goToPage(p)}
+					class={[
+						'h-9 w-9 rounded-md text-sm font-medium transition-colors',
+						p === data.page ? 'bg-primary text-fg-inverse' : 'text-fg-muted hover:bg-bg-muted hover:text-fg'
+					].join(' ')}
+					aria-label="Page {p}"
+					aria-current={p === data.page ? 'page' : undefined}
+				>
+					{p}
+				</button>
+			{/each}
+
+			<Button
+				variant="secondary"
+				size="sm"
+				disabled={data.page >= data.totalPages}
+				onclick={() => goToPage(data.page + 1)}
+				ariaLabel="Next page"
+			>
+				Next &rsaquo;
+			</Button>
+		</nav>
 	{/if}
 </Container>

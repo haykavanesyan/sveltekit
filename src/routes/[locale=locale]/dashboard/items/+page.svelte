@@ -40,7 +40,7 @@
 		if (filter.q) sp.set('q', filter.q);
 		if (filter.status) sp.set('status', filter.status);
 		if (filter.sortBy && filter.sortBy !== 'updatedAt') sp.set('sortBy', filter.sortBy);
-		if (filter.sortDir !== 'desc') sp.set('sortDir', filter.sortDir);
+		if (filter.sortDir && filter.sortDir !== 'desc') sp.set('sortDir', filter.sortDir);
 		if (filter.page > 1) sp.set('page', String(filter.page));
 		goto(`/${data.locale}/dashboard/items?${sp}`, { replaceState: true, keepFocus: true });
 	}
