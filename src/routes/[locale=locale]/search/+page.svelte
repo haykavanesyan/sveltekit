@@ -4,6 +4,7 @@
 	import Badge from '$lib/components/primitives/Badge.svelte';
 	import Input from '$lib/components/primitives/Input.svelte';
 	import Select from '$lib/components/primitives/Select.svelte';
+	import Pagination from '$lib/components/composites/Pagination.svelte';
 	import SeoHead from '$lib/components/layout/SeoHead.svelte';
 	import { getT } from '$lib/i18n/runtime';
 	import { formatDate } from '$lib/utils/formatters';
@@ -11,7 +12,7 @@
 	import type { Post } from '$lib/schemas/post';
 	import type { Tag } from '$lib/schemas/tag';
 
-	let { data }: { data: { posts: Post[]; query: string; activeTag: string; sort: string; nextCursor: string | null; locale: string; tags: Tag[] } } = $props();
+	let { data }: { data: { items: Post[]; page: number; totalPages: number; total: number; query: string; activeTag: string; sort: string; locale: string; tags: Tag[] } } = $props();
 
 	const t = getT();
 	const locale = data.locale as 'en' | 'de';
@@ -20,11 +21,22 @@
 	let activeTag = $state(data.activeTag);
 	let sort = $state(data.sort);
 
-	function updateUrl() {
+	function updateUrl(resetPage = true) {
 		const sp = new URLSearchParams();
 		if (query) sp.set('q', query);
 		if (activeTag) sp.set('tag', activeTag);
 		if (sort && sort !== 'date') sp.set('sort', sort);
+		if (!resetPage && data.page > 1) sp.set('page', String(data.page));
+		goto(`/${locale}/search?${sp}`, { replaceState: true, keepFocus: true });
+	}
+
+	function goToPage(p: number) {
+		const sp = new URLSearchParams(location.search);
+		if (query) sp.set('q', query);
+		if (activeTag) sp.set('tag', activeTag);
+		if (sort && sort !== 'date') sp.set('sort', sort);
+		if (p > 1) sp.set('page', String(p));
+		else sp.delete('page');
 		goto(`/${locale}/search?${sp}`, { replaceState: true, keepFocus: true });
 	}
 
@@ -39,7 +51,7 @@
 </script>
 
 <SeoHead
-	title={t('search.results').replace('{count}', String(data.posts.length)).replace('{query}', query || '...')}
+	title={t('search.results').replace('{count}', String(data.total)).replace('{query}', query || '...')}
 	description="Search blog posts"
 	locale={locale}
 	path="/search"
@@ -57,14 +69,14 @@
 				onkeydown={handleKeydown}
 			/>
 		</div>
-		<button onclick={updateUrl} class="rounded-md bg-primary px-4 text-sm font-medium text-fg-inverse transition-colors hover:bg-primary/90">
+		<button onclick={() => updateUrl(true)} class="rounded-md bg-primary px-4 text-sm font-medium text-fg-inverse transition-colors hover:bg-primary/90">
 			Search
 		</button>
 		<Select
 			name="tag"
 			options={[{ value: '', label: 'All tags' }, ...data.tags.map(t => ({ value: t.slug, label: getTagLabel(t.slug) }))]}
 			bind:value={activeTag}
-			onchange={updateUrl}
+			onchange={() => updateUrl(true)}
 		/>
 		<Select
 			name="sort"
@@ -73,22 +85,22 @@
 				{ value: 'date_asc', label: 'Oldest first' }
 			]}
 			bind:value={sort}
-			onchange={updateUrl}
+			onchange={() => updateUrl(true)}
 		/>
 	</div>
 
 	{#if query}
 		<p class="mt-4 text-sm text-fg-muted">
-			{t('search.results').replace('{count}', String(data.posts.length)).replace('{query}', query)}
+			{t('search.results').replace('{count}', String(data.total)).replace('{query}', query)}
 		</p>
 	{/if}
 
-	{#if data.posts.length === 0}
+	{#if data.items.length === 0}
 		<p class="mt-8 text-fg-muted">{t('search.noResults')}</p>
 	{/if}
 
 	<div class="mt-6 grid gap-6 md:grid-cols-2 lg:grid-cols-3">
-		{#each data.posts as post}
+		{#each data.items as post}
 			<a href="/{locale}/blog/{post.slug}" class="block transition-opacity hover:opacity-90">
 				<Card padding="none" class="h-full overflow-hidden">
 					<div class="h-20" style="background-color: {post.coverColor}"></div>
@@ -110,4 +122,6 @@
 			</a>
 		{/each}
 	</div>
+
+	<Pagination page={data.page} totalPages={data.totalPages} total={data.total} onpage={goToPage} />
 </Container>

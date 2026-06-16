@@ -44,6 +44,19 @@ export function getPage(locale: string, page: number, perPage: number = 6): Page
 export function search(params: SearchParams): SearchResult {
 	let filtered = [...posts];
 	const { q, tag, sort, cursor, limit = 6 } = params;
+	filtered = applySearchFilters(filtered, q, tag, sort);
+	if (cursor) {
+		const cursorIdx = filtered.findIndex((p) => p.id === cursor);
+		if (cursorIdx !== -1) {
+			filtered = filtered.slice(cursorIdx + 1);
+		}
+	}
+	const page = filtered.slice(0, limit);
+	const nextCursor = filtered.length > limit ? page[page.length - 1]?.id ?? null : null;
+	return { posts: page, nextCursor };
+}
+
+function applySearchFilters(filtered: Post[], q?: string, tag?: string, sort?: string): Post[] {
 	if (q) {
 		const lower = q.toLowerCase();
 		filtered = filtered.filter((p) => {
@@ -60,13 +73,16 @@ export function search(params: SearchParams): SearchResult {
 	} else {
 		filtered.sort((a, b) => new Date(b.publishedAt).getTime() - new Date(a.publishedAt).getTime());
 	}
-	if (cursor) {
-		const cursorIdx = filtered.findIndex((p) => p.id === cursor);
-		if (cursorIdx !== -1) {
-			filtered = filtered.slice(cursorIdx + 1);
-		}
-	}
-	const page = filtered.slice(0, limit);
-	const nextCursor = filtered.length > limit ? page[page.length - 1]?.id ?? null : null;
-	return { posts: page, nextCursor };
+	return filtered;
+}
+
+export function searchPage(params: SearchParams & { page?: number }): PageResult {
+	const { q, tag, sort, page = 1, limit = 9 } = params;
+	let filtered = [...posts];
+	filtered = applySearchFilters(filtered, q, tag, sort);
+	const total = filtered.length;
+	const totalPages = Math.max(1, Math.ceil(total / limit));
+	const start = (page - 1) * limit;
+	const items = filtered.slice(start, start + limit);
+	return { items, page, totalPages, total };
 }

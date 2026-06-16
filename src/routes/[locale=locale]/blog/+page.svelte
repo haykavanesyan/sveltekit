@@ -2,7 +2,7 @@
 	import Container from '$lib/components/primitives/Container.svelte';
 	import Card from '$lib/components/primitives/Card.svelte';
 	import Badge from '$lib/components/primitives/Badge.svelte';
-	import Button from '$lib/components/primitives/Button.svelte';
+	import Pagination from '$lib/components/composites/Pagination.svelte';
 	import SeoHead from '$lib/components/layout/SeoHead.svelte';
 	import { getT } from '$lib/i18n/runtime';
 	import { formatDate } from '$lib/utils/formatters';
@@ -64,42 +64,5 @@
 		{/each}
 	</div>
 
-	{#if data.totalPages > 1}
-		<nav class="mt-8 flex items-center justify-center gap-2" aria-label="Blog pagination">
-			<Button
-				variant="secondary"
-				size="sm"
-				disabled={data.page <= 1}
-				onclick={() => goToPage(data.page - 1)}
-				ariaLabel="Previous page"
-			>
-				&lsaquo; Prev
-			</Button>
-
-			{#each { length: data.totalPages } as _, i}
-				{@const p = i + 1}
-				<button
-					onclick={() => goToPage(p)}
-					class={[
-						'h-9 w-9 rounded-md text-sm font-medium transition-colors',
-						p === data.page ? 'bg-primary text-fg-inverse' : 'text-fg-muted hover:bg-bg-muted hover:text-fg'
-					].join(' ')}
-					aria-label="Page {p}"
-					aria-current={p === data.page ? 'page' : undefined}
-				>
-					{p}
-				</button>
-			{/each}
-
-			<Button
-				variant="secondary"
-				size="sm"
-				disabled={data.page >= data.totalPages}
-				onclick={() => goToPage(data.page + 1)}
-				ariaLabel="Next page"
-			>
-				Next &rsaquo;
-			</Button>
-		</nav>
-	{/if}
+	<Pagination page={data.page} totalPages={data.totalPages} total={data.total} onpage={goToPage} />
 </Container>
