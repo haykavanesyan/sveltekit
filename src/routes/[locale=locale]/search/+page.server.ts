@@ -1,6 +1,7 @@
 import { searchPage } from '$lib/server/api/posts';
 import { tags } from '$lib/server/database';
-import type { PageServerLoad } from './$types';
+
+export const config = { runtime: 'edge' };
 
 export const prerender = false;
 
