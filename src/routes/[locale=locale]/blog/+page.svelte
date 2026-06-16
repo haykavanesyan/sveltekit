@@ -52,6 +52,10 @@
 						<h2 class="mt-3 text-lg font-semibold text-fg">{post.translations[data.locale as 'en' | 'de']?.title}</h2>
 						<p class="mt-2 text-sm text-fg-muted line-clamp-2">{post.translations[data.locale as 'en' | 'de']?.excerpt}</p>
 						<div class="mt-4 flex items-center gap-2 text-xs text-fg-muted">
+							<div
+								class="flex h-5 w-5 items-center justify-center rounded-full text-[10px] font-bold text-white"
+								style="background-color: {post.author.avatarColor}"
+							>{post.author.name[0]}</div>
 							<span>{post.author.name}</span>
 							<span>·</span>
 							<span>{formatDate(post.publishedAt, data.locale)}</span>
