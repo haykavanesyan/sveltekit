@@ -108,8 +108,8 @@
 		<Select
 			name="status"
 			options={filterOptions}
-			value={filter.status ?? ''}
-			onchange={(e) => { filter.status = (e.target as HTMLSelectElement).value; filter.page = 1; updateUrl(); }}
+			bind:value={filter.status}
+			onchange={() => { filter.page = 1; updateUrl(); }}
 		/>
 	</div>
 
