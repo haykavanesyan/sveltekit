@@ -21,19 +21,21 @@
 			</div>
 		</div>
 		<div class="flex items-center gap-4">
-			<LocaleSwitcher {locale} />
-			{#if user}
-				<a href="/{locale}/dashboard" class="text-sm font-medium text-primary hover:text-primary-hover">
-					{t('nav.dashboard')}
-				</a>
-				<form action="/{locale}/logout" method="post">
-					<button type="submit" class="cursor-pointer text-sm text-fg-muted hover:text-fg">{t('nav.logout')}</button>
-				</form>
-			{:else}
-				<a href="/{locale}/login" class="text-sm font-medium text-primary hover:text-primary-hover">
-					{t('nav.login')}
-				</a>
-			{/if}
+			<div class="hidden md:flex md:items-center md:gap-4">
+				<LocaleSwitcher {locale} />
+				{#if user}
+					<a href="/{locale}/dashboard" class="text-sm font-medium text-primary hover:text-primary-hover">
+						{t('nav.dashboard')}
+					</a>
+					<form action="/{locale}/logout" method="post">
+						<button type="submit" class="cursor-pointer text-sm text-fg-muted hover:text-fg">{t('nav.logout')}</button>
+					</form>
+				{:else}
+					<a href="/{locale}/login" class="text-sm font-medium text-primary hover:text-primary-hover">
+						{t('nav.login')}
+					</a>
+				{/if}
+			</div>
 			<button
 				class="inline-flex cursor-pointer items-center md:hidden"
 				onclick={() => (menuOpen = !menuOpen)}
@@ -56,6 +58,26 @@
 				<a href="/{locale}" class="text-sm text-fg-muted hover:text-fg" onclick={() => (menuOpen = false)}>{t('nav.home')}</a>
 				<a href="/{locale}/blog" class="text-sm text-fg-muted hover:text-fg" onclick={() => (menuOpen = false)}>{t('nav.blog')}</a>
 				<a href="/{locale}/search" class="text-sm text-fg-muted hover:text-fg" onclick={() => (menuOpen = false)}>{t('nav.search')}</a>
+				
+				<div class="my-2 border-t border-border pt-2">
+					{#if user}
+						<a href="/{locale}/dashboard" class="block py-2 text-sm font-medium text-primary" onclick={() => (menuOpen = false)}>
+							{t('nav.dashboard')}
+						</a>
+						<a href="/{locale}/dashboard/campaigns" class="block py-2 text-sm text-fg-muted hover:text-fg" onclick={() => (menuOpen = false)}>
+							{t('dashboard.items.title')}
+						</a>
+						<form action="/{locale}/logout" method="post" class="mt-2">
+							<button type="submit" class="w-full cursor-pointer py-2 text-left text-sm text-fg-muted hover:text-fg">
+								{t('nav.logout')}
+							</button>
+						</form>
+					{:else}
+						<a href="/{locale}/login" class="block py-2 text-sm font-medium text-primary" onclick={() => (menuOpen = false)}>
+							{t('nav.login')}
+						</a>
+					{/if}
+				</div>
 			</div>
 		</div>
 	{/if}

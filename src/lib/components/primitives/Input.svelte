@@ -1,8 +1,8 @@
 <script lang="ts">
-	let { label, error, value = $bindable(''), placeholder = '', type = 'text', name, id, class: className = '', oninput, onblur, onkeydown, ...rest }: {
+	let { label, error, value = $bindable(), placeholder = '', type = 'text', name, id, class: className = '', oninput, onblur, onkeydown, ...rest }: {
 		label?: string;
 		error?: string;
-		value?: string | number;
+		value?: string | number | null | undefined;
 		placeholder?: string;
 		type?: string;
 		name?: string;

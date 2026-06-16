@@ -1,7 +1,7 @@
 <script lang="ts">
-	let { label, value = $bindable(''), options, name, id, class: className = '', dropDownClassName = '', onchange, placeholder }: {
+	let { label, value = $bindable(), options, name, id, class: className = '', dropDownClassName = '', onchange, placeholder }: {
 		label?: string;
-		value?: string;
+		value?: string | null | undefined;
 		options: { value: string; label: string }[];
 		name?: string;
 		id?: string;

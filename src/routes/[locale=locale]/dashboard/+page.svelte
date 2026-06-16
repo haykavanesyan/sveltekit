@@ -1,11 +1,13 @@
 <script lang="ts">
 	import Heading from '$lib/components/primitives/Heading.svelte';
 	import Card from '$lib/components/primitives/Card.svelte';
-	import { getT } from '$lib/i18n/runtime';
+	import { createT } from '$lib/i18n/runtime';
+	import { page } from '$app/stores';
 
 	let { data }: { data: { stats: { totalBudget: number; totalSpent: number; activeCount: number; avgCtr: number }; user: { name: string; role: string }; locale: string } } = $props();
 
-	const t = getT();
+	let locale = $derived($page.params.locale);
+	let t = $derived(createT(locale as 'en' | 'de'));
 	const { totalBudget, totalSpent, activeCount, avgCtr } = data.stats;
 </script>
 

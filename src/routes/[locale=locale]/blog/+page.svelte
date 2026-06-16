@@ -3,22 +3,24 @@
 	import PostCard from '$lib/components/composites/PostCard.svelte';
 	import Pagination from '$lib/components/composites/Pagination.svelte';
 	import SeoHead from '$lib/components/layout/SeoHead.svelte';
-	import { getT } from '$lib/i18n/runtime';
+	import { createT } from '$lib/i18n/runtime';
 	import { goto } from '$app/navigation';
+	import { page } from '$app/stores';
 
 	let { data }: { data: { items: import('$lib/schemas/post').Post[]; page: number; totalPages: number; total: number; locale: string; tags: import('$lib/schemas/tag').Tag[] } } = $props();
 
-	const t = getT();
+	let locale = $derived($page.params.locale as 'en' | 'de');
+	let t = $derived(createT(locale));
 
 	function goToPage(p: number) {
-		goto(`/${data.locale}/blog?page=${p}`, { replaceState: true, keepFocus: true });
+		goto(`/${locale}/blog?page=${p}`, { replaceState: true, keepFocus: true });
 	}
 </script>
 
 <SeoHead
 	title={t('blog.title')}
 	description="Read our latest articles."
-	locale={data.locale}
+	locale={locale}
 	path="/blog"
 />
 
@@ -33,9 +35,9 @@
 		{#each data.items as post}
 			<PostCard
 				{post}
-				locale={data.locale}
+				locale={locale}
 				tags={data.tags}
-				readingTime={t('blog.readingTime').replace('{minutes}', String(post.readingTimeMinutes))}
+				readingTime={t('blog.readingTime', { minutes: post.readingTimeMinutes })}
 			/>
 		{/each}
 	</div>

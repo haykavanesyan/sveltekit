@@ -1,12 +1,11 @@
 <script lang="ts">
 	import Container from '$lib/components/primitives/Container.svelte';
 	import Heading from '$lib/components/primitives/Heading.svelte';
-	import Input from '$lib/components/primitives/Input.svelte';
+	import Search from '$lib/components/composites/Search.svelte';
 	import Select from '$lib/components/primitives/Select.svelte';
 	import DataTable from '$lib/components/composites/DataTable.svelte';
-	import { getT } from '$lib/i18n/runtime';
+	import { createT } from '$lib/i18n/runtime';
 	import { decodeItemsFilter } from '$lib/utils/url-state';
-	import { ItemsFilterSchema } from '$lib/schemas/item';
 	import type { Item } from '$lib/schemas/item';
 	import { page } from '$app/stores';
 	import { goto } from '$app/navigation';
@@ -22,15 +21,34 @@
 		}
 	} = $props();
 
-	const t = getT();
+	let locale = $derived($page.params.locale);
+	let t = $derived(createT(locale as 'en' | 'de'));
 
-	let filter = $state(decodeItemsFilter($page.url));
+	let initialFilter = decodeItemsFilter($page.url);
+	let filter = $state({ ...initialFilter, q: initialFilter.q ?? '' });
 	let rows = $state<Item[]>([]);
 	let loading = $state(true);
 
+	// Sync filter when URL changes (e.g. back button)
 	$effect(() => {
-		data.streamed.rows.then((r) => {
-			rows = r;
+		const newFilter = decodeItemsFilter($page.url);
+		// Only update if non-q fields changed
+		const { q: _, ...currentWithoutQ } = filter;
+		const { q: __, ...newWithoutQ } = newFilter;
+		if (JSON.stringify(newWithoutQ) !== JSON.stringify(currentWithoutQ)) {
+			filter = { ...newFilter, q: filter.q };
+		}
+	});
+
+	$effect(() => {
+		const promise = data.streamed.rows;
+		loading = true;
+		promise.then((r) => {
+			if (data.streamed.rows === promise) {
+				rows = r;
+				loading = false;
+			}
+		}).catch(() => {
 			loading = false;
 		});
 	});
@@ -39,10 +57,10 @@
 		const sp = new URLSearchParams();
 		if (filter.q) sp.set('q', filter.q);
 		if (filter.status) sp.set('status', filter.status);
-		if (filter.sortBy && filter.sortBy !== 'updatedAt') sp.set('sortBy', filter.sortBy);
+		if (filter.sortBy) sp.set('sortBy', filter.sortBy);
 		if (filter.sortDir && filter.sortDir !== 'desc') sp.set('sortDir', filter.sortDir);
 		if (filter.page > 1) sp.set('page', String(filter.page));
-		goto(`/${data.locale}/dashboard/items?${sp}`, { replaceState: true, keepFocus: true });
+		goto(`/${locale}/dashboard/campaigns?${sp}`, { replaceState: true, keepFocus: true });
 	}
 
 	function handleSort(column: string) {
@@ -92,24 +110,22 @@
 	<div class="flex items-center justify-between">
 		<div>
 			<Heading level={1}>{t('dashboard.items.title')}</Heading>
-			<p class="mt-1 text-sm text-fg-muted">{t('dashboard.items.description')}</p>
 		</div>
 	</div>
 
 	<div class="mt-6 flex flex-col gap-4 sm:flex-row">
 		<div class="flex-1">
-			<Input
-				name="q"
+			<Search
 				placeholder={t('search.placeholder')}
-				value={filter.q ?? ''}
-				oninput={(e) => { filter.q = (e.target as HTMLInputElement).value; updateUrl(); }}
+				bind:value={filter.q}
+				onsearch={() => { updateUrl(); }}
 			/>
 		</div>
 		<Select
 			name="status"
 			options={filterOptions}
-			bind:value={filter.status}
-			onchange={() => { filter.page = 1; updateUrl(); }}
+			value={filter.status || ''}
+			onchange={(e: any) => { filter.status = e.detail || undefined; filter.page = 1; updateUrl(); }}
 		/>
 	</div>
 
@@ -122,8 +138,8 @@
 			totalPages={data.totalPages}
 			sortBy={filter.sortBy ?? 'updatedAt'}
 			sortDir={filter.sortDir ?? 'desc'}
-			locale={data.locale}
-			userRole={data.user.role}
+			locale={locale}
+			userRole={data.user?.role ?? 'viewer'}
 			onsort={handleSort}
 			onpage={handlePage}
 			onedit={handleEdit}

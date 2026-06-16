@@ -2,17 +2,18 @@
 	import Container from '$lib/components/primitives/Container.svelte';
 	import Badge from '$lib/components/primitives/Badge.svelte';
 	import SeoHead from '$lib/components/layout/SeoHead.svelte';
-	import { getT } from '$lib/i18n/runtime';
+	import { createT } from '$lib/i18n/runtime';
 	import { formatDate } from '$lib/utils/formatters';
 	import type { Post } from '$lib/schemas/post';
 	import type { Tag } from '$lib/schemas/tag';
+	import { page } from '$app/stores';
 
 	let { data }: { data: { post: Post; locale: string; tags: Tag[] } } = $props();
 
-	const t = getT();
+	let locale = $derived($page.params.locale as 'en' | 'de');
+	let t = $derived(createT(locale));
 	const post = data.post;
-	const locale = data.locale as 'en' | 'de';
-	const translation = post.translations[locale] || post.translations['en'] || { title: post.slug, excerpt: '', body: '' };
+	const translation = $derived(post.translations[locale] || post.translations['en'] || { title: post.slug, excerpt: '', body: '' });
 
 	function getTagLabel(slug: string): string {
 		const tag = data.tags.find((t) => t.slug === slug);
@@ -69,7 +70,7 @@
 		<span>·</span>
 		<span>{formatDate(post.publishedAt, locale)}</span>
 		<span>·</span>
-		<span>{t('blog.readingTime').replace('{minutes}', String(post.readingTimeMinutes))}</span>
+		<span>{t('blog.readingTime', { minutes: post.readingTimeMinutes })}</span>
 	</div>
 
 	<article class="prose prose-gray mt-8 max-w-none dark:prose-invert">

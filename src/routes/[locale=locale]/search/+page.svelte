@@ -1,17 +1,18 @@
 <script lang="ts">
 	import Container from '$lib/components/primitives/Container.svelte';
 	import PostCard from '$lib/components/composites/PostCard.svelte';
-	import Input from '$lib/components/primitives/Input.svelte';
+	import Search from '$lib/components/composites/Search.svelte';
 	import Select from '$lib/components/primitives/Select.svelte';
 	import Pagination from '$lib/components/composites/Pagination.svelte';
 	import SeoHead from '$lib/components/layout/SeoHead.svelte';
-	import { getT } from '$lib/i18n/runtime';
+	import { createT } from '$lib/i18n/runtime';
 	import { goto } from '$app/navigation';
+	import { page } from '$app/stores';
 
 	let { data }: { data: { items: import('$lib/schemas/post').Post[]; page: number; totalPages: number; total: number; query: string; activeTag: string; sort: string; locale: string; tags: import('$lib/schemas/tag').Tag[] } } = $props();
 
-	const t = getT();
-	const locale = data.locale as 'en' | 'de';
+	let locale = $derived($page.params.locale as 'en' | 'de');
+	let t = $derived(createT(locale));
 
 	let query = $state(data.query);
 	let activeTag = $state(data.activeTag);
@@ -35,10 +36,6 @@
 		else sp.delete('page');
 		goto(`/${locale}/search?${sp}`, { replaceState: true, keepFocus: true });
 	}
-
-	function handleKeydown(e: KeyboardEvent) {
-		if (e.key === 'Enter') updateUrl();
-	}
 </script>
 
 <SeoHead
@@ -53,16 +50,12 @@
 
 	<div class="mt-6 flex flex-col gap-4 sm:flex-row">
 		<div class="flex-1">
-			<Input
-				name="q"
+			<Search
 				placeholder={t('search.placeholder')}
 				bind:value={query}
-				onkeydown={handleKeydown}
+				onsearch={() => updateUrl(true)}
 			/>
 		</div>
-		<button onclick={() => updateUrl(true)} class="cursor-pointer rounded-md bg-primary px-4 text-sm font-medium text-fg-inverse transition-colors hover:bg-primary/90">
-			Search
-		</button>
 		<Select
 			name="tag"
 			options={[{ value: '', label: 'All tags' }, ...data.tags.map(t => ({ value: t.slug, label: (t.label as Record<string, string>)[locale] || t.slug }))]}

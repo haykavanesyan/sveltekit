@@ -38,6 +38,15 @@ export function getItems(filter: ItemsFilter): {
 			case 'name':
 				cmp = a.name.localeCompare(b.name);
 				break;
+			case 'status':
+				cmp = a.status.localeCompare(b.status);
+				break;
+			case 'channel':
+				cmp = a.channel.localeCompare(b.channel);
+				break;
+			case 'owner':
+				cmp = a.owner.name.localeCompare(b.owner.name);
+				break;
 			case 'budget':
 				cmp = a.budget - b.budget;
 				break;
@@ -48,6 +57,8 @@ export function getItems(filter: ItemsFilter): {
 				cmp = a.ctr - b.ctr;
 				break;
 			case 'updatedAt':
+				cmp = new Date(a.updatedAt).getTime() - new Date(b.updatedAt).getTime();
+				break;
 			default:
 				cmp = new Date(a.updatedAt).getTime() - new Date(b.updatedAt).getTime();
 				break;

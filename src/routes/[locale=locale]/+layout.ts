@@ -1,10 +1,10 @@
 import type { LayoutLoad } from './$types';
 
-export const prerender = true;
 export const ssr = true;
 
-export function load({ params }) {
+export function load({ params, data }) {
 	return {
-		locale: params.locale as 'en' | 'de'
+		locale: params.locale as 'en' | 'de',
+		user: data.user
 	};
 }

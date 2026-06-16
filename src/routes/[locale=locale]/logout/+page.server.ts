@@ -12,3 +12,14 @@ export const load: PageServerLoad = async ({ cookies, params }) => {
 	cookies.delete('session', { path: '/' });
 	throw redirect(303, `/${params.locale}/login`);
 };
+
+export const actions = {
+	default: async ({ cookies, params }) => {
+		const token = cookies.get('session');
+		if (token) {
+			destroySession(token);
+		}
+		cookies.delete('session', { path: '/' });
+		throw redirect(303, `/${params.locale}/login`);
+	}
+};

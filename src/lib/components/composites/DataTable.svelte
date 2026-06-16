@@ -4,6 +4,7 @@
 	import Skeleton from '$lib/components/primitives/Skeleton.svelte';
 	import { formatCurrency, formatPercent, formatDate } from '$lib/utils/formatters';
 	import type { Item } from '$lib/schemas/item';
+	import Pagination from './Pagination.svelte';
 
 	let {
 		rows = $bindable([]),
@@ -70,14 +71,14 @@
 	}
 
 	const columns = [
-		{ key: 'name', label: 'Name', sortable: true },
-		{ key: 'status', label: 'Status', sortable: true },
-		{ key: 'channel', label: 'Channel', sortable: true },
-		{ key: 'owner', label: 'Owner', sortable: false },
-		{ key: 'budget', label: 'Budget', sortable: true },
-		{ key: 'spent', label: 'Spent', sortable: true },
-		{ key: 'ctr', label: 'CTR', sortable: true },
-		{ key: 'updatedAt', label: 'Updated', sortable: true }
+		{ key: 'name', label: 'Name', sortable: true, mobile: true },
+		{ key: 'status', label: 'Status', sortable: true, mobile: true },
+		{ key: 'channel', label: 'Channel', sortable: true, mobile: false },
+		{ key: 'owner', label: 'Owner', sortable: true, mobile: false },
+		{ key: 'budget', label: 'Budget', sortable: true, mobile: true },
+		{ key: 'spent', label: 'Spent', sortable: true, mobile: false },
+		{ key: 'ctr', label: 'CTR', sortable: true, mobile: false },
+		{ key: 'updatedAt', label: 'Updated', sortable: true, mobile: false }
 	];
 
 	const statusVariant: Record<string, 'success' | 'warning' | 'danger' | 'info' | 'default'> = {
@@ -91,26 +92,30 @@
 </script>
 
 <div class="overflow-x-auto rounded-lg border border-border">
-	<table class="w-full text-left text-sm" role="grid" aria-label="Campaigns table">
+	<table class="w-full table-fixed text-left text-sm" role="grid" aria-label="Campaigns table">
 		<caption class="sr-only">Campaigns data table with sortable columns and inline edit</caption>
 		<thead class="border-b border-border bg-bg-muted">
 			<tr>
 				{#each columns as col}
 					<th
 						scope="col"
-						class="px-4 py-3 text-xs font-medium uppercase text-fg-muted"
+						class={[
+							'px-4 py-3 text-xs font-medium uppercase text-fg-muted truncate',
+							!col.mobile && 'hidden lg:table-cell'
+						].filter(Boolean).join(' ')}
 						aria-sort={col.sortable && sortBy === col.key ? (sortDir === 'asc' ? 'ascending' : 'descending') : 'none'}
 					>
 						{#if col.sortable}
 							<button
 								onclick={() => handleSort(col.key)}
-								class="cursor-pointer font-medium text-fg-muted hover:text-fg"
+								class="flex w-full cursor-pointer items-center justify-between font-medium text-fg-muted hover:text-fg"
 								aria-label="Sort by {col.label}{sortBy === col.key ? ', currently ' + sortDir + 'ending' : ''}"
 							>
-								{col.label}{getSortIndicator(col.key)}
+								<span class="truncate">{col.label}</span>
+								<span class="ml-2 shrink-0 text-[0.6em]">{getSortIndicator(col.key)}</span>
 							</button>
 						{:else}
-							{col.label}
+							<span class="truncate">{col.label}</span>
 						{/if}
 					</th>
 				{/each}
@@ -121,7 +126,7 @@
 				{#each { length: 5 } as _}
 					<tr class="border-b border-border">
 						{#each columns as col}
-							<td class="px-4 py-3"><Skeleton width="80%" height="1rem" /></td>
+							<td class={["px-4 py-3", !col.mobile && "hidden lg:table-cell"].filter(Boolean).join(' ')}><Skeleton width="80%" height="1rem" /></td>
 						{/each}
 					</tr>
 				{/each}
@@ -138,8 +143,8 @@
 						<td class="px-4 py-3">
 							<Badge variant={statusVariant[item.status] || 'default'}>{item.status}</Badge>
 						</td>
-						<td class="px-4 py-3 text-fg">{item.channel}</td>
-						<td class="px-4 py-3 text-fg-muted">{item.owner.name}</td>
+						<td class="hidden px-4 py-3 text-fg lg:table-cell">{item.channel}</td>
+						<td class="hidden px-4 py-3 text-fg-muted lg:table-cell">{item.owner.name}</td>
 						<td class="px-4 py-3">
 							{#if editingId === item.id}
 								<div class="flex items-center gap-1">
@@ -168,9 +173,9 @@
 								</button>
 							{/if}
 						</td>
-						<td class="px-4 py-3 text-fg">{formatCurrency(item.spent, locale)}</td>
-						<td class="px-4 py-3 text-fg">{formatPercent(item.ctr, locale)}</td>
-						<td class="px-4 py-3 text-fg-muted">{formatDate(item.updatedAt, locale)}</td>
+						<td class="hidden px-4 py-3 text-fg lg:table-cell">{formatCurrency(item.spent, locale)}</td>
+						<td class="hidden px-4 py-3 text-fg lg:table-cell">{formatPercent(item.ctr, locale)}</td>
+						<td class="hidden px-4 py-3 text-fg-muted lg:table-cell">{formatDate(item.updatedAt, locale)}</td>
 					</tr>
 				{/each}
 			{/if}
@@ -178,44 +183,4 @@
 	</table>
 </div>
 
-{#if totalPages > 1}
-	<div class="mt-4 flex items-center justify-between">
-		<p class="text-sm text-fg-muted">
-			Page {page} of {totalPages} ({total} total)
-		</p>
-		<div class="flex items-center gap-2">
-			<Button
-				variant="secondary"
-				size="sm"
-				disabled={page <= 1}
-				onclick={() => onpage?.(page - 1)}
-				ariaLabel="Previous page"
-			>
-				&lsaquo; Prev
-			</Button>
-			{#each { length: Math.min(totalPages, 5) } as _, i}
-				{@const p = i + 1}
-				<button
-					onclick={() => onpage?.(p)}
-				class={[
-					'h-8 w-8 cursor-pointer rounded-md text-sm font-medium transition-colors',
-					p === page ? 'bg-primary text-fg-inverse' : 'text-fg-muted hover:bg-bg-muted hover:text-fg'
-				].join(' ')}
-					aria-label="Page {p}"
-					aria-current={p === page ? 'page' : undefined}
-				>
-					{p}
-				</button>
-			{/each}
-			<Button
-				variant="secondary"
-				size="sm"
-				disabled={page >= totalPages}
-				onclick={() => onpage?.(page + 1)}
-				ariaLabel="Next page"
-			>
-				Next &rsaquo;
-			</Button>
-		</div>
-	</div>
-{/if}
+<Pagination {page} {totalPages} {total} onpage={onpage} />
