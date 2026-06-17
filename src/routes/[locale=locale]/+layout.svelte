@@ -2,14 +2,12 @@
 	import Header from '$lib/components/layout/Header.svelte';
 	import Footer from '$lib/components/layout/Footer.svelte';
 	import SkipLink from '$lib/components/layout/SkipLink.svelte';
-	import SeoHead from '$lib/components/layout/SeoHead.svelte';
 	import ErrorBoundary from '$lib/components/composites/ErrorBoundary.svelte';
 	import Toast from '$lib/components/primitives/Toast.svelte';
 	import { setLocaleContext } from '$lib/i18n/runtime.svelte';
 	import { onMount } from 'svelte';
 	import { initWebVitals } from '$lib/utils/web-vitals';
 	import { initErrorReporting } from '$lib/utils/error-reporting';
-	import { page } from '$app/stores';
 
 	let { data, children }: {
 		data: { locale: 'en' | 'de'; user?: { name: string; role: string } | null };

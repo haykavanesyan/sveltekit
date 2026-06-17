@@ -8,15 +8,10 @@
 
 	const t = getT();
 
-	let value = $state((() => locale)());
-
-	$effect(() => {
-		value = locale;
-	});
-
-	function handleChange() {
-		if (!browser || value === locale) return;
-		const path = location.pathname.replace(/^\/[a-z]{2}/, `/${value}`);
+	function handleChange(e: CustomEvent<string>) {
+		const v = e.detail;
+		if (!browser || v === locale) return;
+		const path = location.pathname.replace(/^\/[a-z]{2}/, `/${v}`);
 		goto(path, { replaceState: true });
 	}
 </script>
@@ -30,7 +25,7 @@
 		{ value: 'en', label: t('locale.en') },
 		{ value: 'de', label: t('locale.de') }
 	]}
-	bind:value
+	value={locale}
 	onchange={handleChange}
 	class="w-36"
 />
