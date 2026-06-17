@@ -125,7 +125,7 @@
 			name="status"
 			options={filterOptions}
 			value={filter.status || ''}
-			onchange={(e: any) => { filter.status = e.detail || undefined; filter.page = 1; updateUrl(); }}
+			onchange={(e: CustomEvent<string>) => { filter.status = e.detail || undefined; filter.page = 1; updateUrl(); }}
 		/>
 	</div>
 

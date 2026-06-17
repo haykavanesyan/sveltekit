@@ -15,7 +15,7 @@
 
 	let open = $state(false);
 	let triggerEl: HTMLButtonElement;
-	let listEl: HTMLDivElement;
+	let listEl = $state<HTMLDivElement | null>(null);
 	let activeIdx = $state(-1);
 
 	const selected = $derived(options.find((o) => o.value === value));
@@ -88,9 +88,10 @@
 
 	$effect(() => {
 		if (!open || !triggerEl || !listEl) return;
+		const currentList = listEl;
 
 		const main = document.querySelector('main');
-		main?.appendChild(listEl);
+		main?.appendChild(currentList);
 
 		const gap = 4;
 
@@ -99,21 +100,21 @@
 			const top = tr.bottom + window.scrollY + gap;
 			const left = tr.left + window.scrollX;
 
-			listEl.style.position = 'absolute';
-			listEl.style.top = `${top}px`;
-			listEl.style.left = `${left}px`;
-			listEl.style.minWidth = `${tr.width}px`;
-			listEl.style.width = 'auto';
+			currentList.style.position = 'absolute';
+			currentList.style.top = `${top}px`;
+			currentList.style.left = `${left}px`;
+			currentList.style.minWidth = `${tr.width}px`;
+			currentList.style.width = 'auto';
 
 			requestAnimationFrame(() => {
-				const lr = listEl.getBoundingClientRect();
+				const lr = currentList.getBoundingClientRect();
 
 				if (lr.bottom > window.innerHeight && tr.top > lr.height) {
-					listEl.style.top = `${tr.top + window.scrollY - gap - lr.height}px`;
+					currentList.style.top = `${tr.top + window.scrollY - gap - lr.height}px`;
 				}
 				const overflowRight = lr.right - window.innerWidth;
 				if (overflowRight > 0) {
-					listEl.style.left = `${Math.max(0, parseFloat(listEl.style.left) - overflowRight)}px`;
+					currentList.style.left = `${Math.max(0, parseFloat(currentList.style.left) - overflowRight)}px`;
 				}
 			});
 		}
@@ -124,7 +125,7 @@
 		window.addEventListener('resize', position, { passive: true });
 
 		return () => {
-			listEl?.remove();
+			currentList?.remove();
 			window.removeEventListener('scroll', position);
 			window.removeEventListener('resize', position);
 		};

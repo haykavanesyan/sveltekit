@@ -158,7 +158,6 @@
 										step="0.01"
 										min="0"
 										aria-label="Edit budget for {item.name}"
-										autofocus
 									/>
 								</div>
 							{:else}
