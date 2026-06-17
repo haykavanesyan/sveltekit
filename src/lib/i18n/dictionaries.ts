@@ -1,6 +1,6 @@
 import en from '$mocks/i18n.en.json';
 import de from '$mocks/i18n.de.json';
-import type { Locale } from './runtime';
+import type { Locale } from './runtime.svelte';
 
 export type Dict = Record<string, string>;
 
