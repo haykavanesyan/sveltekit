@@ -1,11 +1,17 @@
-import { getPage } from '$lib/server/api/posts';
+import { getAll } from '$lib/server/api/posts';
 import { tags } from '$lib/server/database';
-import type { PageServerLoad } from './$types';
+import type { EntryGenerator, PageServerLoad } from './$types';
 
-export const prerender = false;
+export const prerender = true;
 
-export function load({ url, params }) {
-	const page = Number(url.searchParams.get('page')) || 1;
-	const result = getPage(params.locale, page);
-	return { ...result, locale: params.locale, tags };
-}
+export const entries: EntryGenerator = () => {
+	return [{ locale: 'en' }, { locale: 'de' }];
+};
+
+export const load: PageServerLoad = ({ params }) => {
+	const locale = params.locale as 'en' | 'de';
+	const allPosts = getAll(locale);
+	const items = allPosts.slice(0, 6);
+	const nextCursor = allPosts.length > 6 ? allPosts[5].id : null;
+	return { items, total: allPosts.length, nextCursor, locale, tags };
+};

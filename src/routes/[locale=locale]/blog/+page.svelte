@@ -1,46 +1,76 @@
 <script lang="ts">
 	import Container from '$lib/components/primitives/Container.svelte';
 	import PostCard from '$lib/components/composites/PostCard.svelte';
-	import Pagination from '$lib/components/composites/Pagination.svelte';
+	import Button from '$lib/components/primitives/Button.svelte';
 	import SeoHead from '$lib/components/layout/SeoHead.svelte';
 	import { createT } from '$lib/i18n/runtime';
-	import { goto } from '$app/navigation';
 	import { page } from '$app/stores';
+	import type { Post } from '$lib/schemas/post';
+	import type { Tag } from '$lib/schemas/tag';
 
-	let { data }: { data: { items: import('$lib/schemas/post').Post[]; page: number; totalPages: number; total: number; locale: string; tags: import('$lib/schemas/tag').Tag[] } } = $props();
+	let { data }: {
+		data: { items: Post[]; total: number; nextCursor: string | null; locale: string; tags: Tag[] };
+	} = $props();
 
 	let locale = $derived($page.params.locale as 'en' | 'de');
 	let t = $derived(createT(locale));
 
-	function goToPage(p: number) {
-		goto(`/${locale}/blog?page=${p}`, { replaceState: true, keepFocus: true });
+	let posts = $state<Post[]>([...data.items]);
+	let nextCursor = $state<string | null>(data.nextCursor);
+	let loading = $state(false);
+
+	async function loadMore() {
+		if (!nextCursor || loading) return;
+		loading = true;
+		try {
+			const res = await fetch(`/api/posts?cursor=${nextCursor}&limit=6`);
+			const result = await res.json();
+			posts = [...posts, ...result.posts];
+			nextCursor = result.nextCursor;
+		} catch {
+			// silently fail — button remains for retry
+		} finally {
+			loading = false;
+		}
 	}
 </script>
 
 <SeoHead
 	title={t('blog.title')}
 	description="Read our latest articles."
-	locale={locale}
+	{locale}
 	path="/blog"
 />
 
 <Container size="lg" class="py-12">
 	<h1 class="text-3xl font-bold text-fg">{t('blog.title')}</h1>
 
-	{#if data.items.length === 0}
+	{#if posts.length === 0}
 		<p class="mt-8 text-fg-muted">{t('blog.empty')}</p>
 	{/if}
 
 	<div class="mt-8 grid gap-6 md:grid-cols-2 lg:grid-cols-3">
-		{#each data.items as post}
+		{#each posts as post (post.id)}
 			<PostCard
 				{post}
-				locale={locale}
+				{locale}
 				tags={data.tags}
 				readingTime={t('blog.readingTime', { minutes: post.readingTimeMinutes })}
 			/>
 		{/each}
 	</div>
 
-	<Pagination page={data.page} totalPages={data.totalPages} total={data.total} onpage={goToPage} />
+	{#if nextCursor}
+		<div class="mt-8 flex justify-center">
+			<Button onclick={loadMore} loading={loading} variant="secondary" size="lg">
+				Load more
+			</Button>
+		</div>
+	{/if}
+
+	{#if data.total > 0}
+		<p class="mt-4 text-center text-sm text-fg-muted">
+			Showing {posts.length} of {data.total} posts
+		</p>
+	{/if}
 </Container>
