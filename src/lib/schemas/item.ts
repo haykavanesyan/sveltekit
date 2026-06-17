@@ -41,6 +41,10 @@ export const ItemPatchSchema = z.object({
 	status: z.enum(['draft', 'scheduled', 'active', 'paused', 'completed', 'archived']).optional()
 });
 
+export const ItemPatchWithIdSchema = ItemPatchSchema.extend({
+	id: z.string()
+});
+
 export type Item = z.infer<typeof ItemSchema>;
 export type ItemsFilter = z.infer<typeof ItemsFilterSchema>;
 export type ItemPatch = z.infer<typeof ItemPatchSchema>;
