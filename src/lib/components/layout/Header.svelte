@@ -1,5 +1,6 @@
 <script lang="ts">
 	import LocaleSwitcher from './LocaleSwitcher.svelte';
+	import ThemeSwitcher from './ThemeSwitcher.svelte';
 	import { page } from '$app/stores';
 
 	let { locale, t, user }: {
@@ -26,7 +27,8 @@
 				<a href="/{locale}/search" class="text-sm {isActive(`/${locale}/search`) ? 'font-semibold text-fg' : 'text-fg-muted hover:text-fg'}">{t('nav.search')}</a>
 			</div>
 		</div>
-		<div class="flex items-center gap-4">
+		<div class="flex items-center gap-2">
+			<ThemeSwitcher />
 			<div class="hidden md:flex md:items-center md:gap-4">
 				<LocaleSwitcher {locale} />
 				{#if user}
