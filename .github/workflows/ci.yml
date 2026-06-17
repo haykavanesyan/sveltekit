@@ -46,6 +46,6 @@ jobs:
       - name: Lighthouse CI
         run: |
           npm install -g @lhci/cli
-          npx lhci autorun --config=lighthouserc.js || echo "Lighthouse CI failed"
+          npx lhci autorun --config=lighthouserc.js
 
       - run: npm run size
