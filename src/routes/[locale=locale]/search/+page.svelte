@@ -40,7 +40,7 @@ import { SvelteURLSearchParams } from 'svelte/reactivity';
 </script>
 
 <SeoHead
-	title={t('search.results').replace('{count}', String(data.total)).replace('{query}', query || '...')}
+	title={t('search.results', { count: data.total, query: query || '...' })}
 	description="Search blog posts"
 	locale={locale}
 	path="/search"
@@ -76,7 +76,7 @@ import { SvelteURLSearchParams } from 'svelte/reactivity';
 
 	{#if query}
 		<p class="mt-4 text-sm text-fg-muted">
-			{t('search.results').replace('{count}', String(data.total)).replace('{query}', query)}
+			{t('search.results', { count: data.total, query })}
 		</p>
 	{/if}
 

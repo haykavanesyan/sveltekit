@@ -3,6 +3,7 @@
 	import Footer from '$lib/components/layout/Footer.svelte';
 	import SkipLink from '$lib/components/layout/SkipLink.svelte';
 	import SeoHead from '$lib/components/layout/SeoHead.svelte';
+	import ErrorBoundary from '$lib/components/composites/ErrorBoundary.svelte';
 	import Toast from '$lib/components/primitives/Toast.svelte';
 	import { setLocaleContext, createT } from '$lib/i18n/runtime';
 	import { onMount } from 'svelte';
@@ -42,8 +43,10 @@
 	/>
 	<Header locale={data.locale} {t} {user} />
 	<main id="main-content" class="flex-1">
-		{@render children?.()}
+		<ErrorBoundary>
+			{@render children?.()}
+		</ErrorBoundary>
 	</main>
 	<Footer {t} locale={data.locale} />
-	<Toast messages={[]} />
+	<Toast />
 </div>

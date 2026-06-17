@@ -7,6 +7,7 @@ export type SearchParams = {
 	sort?: 'date' | 'date_asc';
 	cursor?: string;
 	limit?: number;
+	locale?: string;
 };
 
 export type SearchResult = {
@@ -43,7 +44,10 @@ export function getPage(locale: string, page: number, perPage: number = 6): Page
 
 export function search(params: SearchParams): SearchResult {
 	let filtered = [...posts];
-	const { q, tag, sort, cursor, limit = 6 } = params;
+	const { q, tag, sort, cursor, limit = 6, locale } = params;
+	if (locale === 'en' || locale === 'de') {
+		filtered = filtered.filter((p) => p.translations[locale]);
+	}
 	filtered = applySearchFilters(filtered, q, tag, sort);
 	if (cursor) {
 		const cursorIdx = filtered.findIndex((p) => p.id === cursor);

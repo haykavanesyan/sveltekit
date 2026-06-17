@@ -1,17 +1,14 @@
 <script lang="ts">
-	let { messages = [] }: {
-		messages?: { id: string; text: string; type: 'success' | 'error' | 'info' }[];
-	} = $props();
+	import { toast } from '$lib/stores/toast.svelte';
 
 	function dismiss(id: string) {
-		const idx = messages.findIndex((m) => m.id === id);
-		if (idx !== -1) messages.splice(idx, 1);
+		toast.dismiss(id);
 	}
 </script>
 
-{#if messages.length > 0}
+{#if toast.messages.length > 0}
 	<div class="fixed bottom-4 right-4 z-50 flex flex-col gap-2" aria-live="polite">
-		{#each messages as msg (msg.id)}
+		{#each toast.messages as msg (msg.id)}
 			<div
 				role="alert"
 				class={[

@@ -6,10 +6,11 @@
 	import DataTable from '$lib/components/composites/DataTable.svelte';
 	import { createT } from '$lib/i18n/runtime';
 	import { decodeItemsFilter } from '$lib/utils/url-state';
+	import { toast } from '$lib/stores/toast.svelte';
 	import type { Item } from '$lib/schemas/item';
-import { page } from '$app/stores';
-import { goto } from '$app/navigation';
-import { SvelteURLSearchParams } from 'svelte/reactivity';
+	import { page } from '$app/stores';
+	import { goto, invalidate } from '$app/navigation';
+	import { SvelteURLSearchParams } from 'svelte/reactivity';
 
 	let { data }: {
 		data: {
@@ -91,8 +92,11 @@ import { SvelteURLSearchParams } from 'svelte/reactivity';
 				body: JSON.stringify({ budget: newBudget })
 			});
 			if (!res.ok) throw new Error('Patch failed');
+			toast.add('Budget updated', 'success');
+			await invalidate((url) => url.pathname.includes('/dashboard/campaigns'));
 		} catch {
 			item.budget = prevBudget;
+			toast.add('Failed to update budget. Reverted.', 'error');
 		}
 	}
 

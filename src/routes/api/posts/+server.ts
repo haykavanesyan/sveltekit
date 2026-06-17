@@ -10,7 +10,8 @@ export const GET: RequestHandler = ({ url }) => {
 	const cursor = url.searchParams.get('cursor') || undefined;
 	const sort = (url.searchParams.get('sort') || 'date') as 'date' | 'date_asc';
 	const limit = Number(url.searchParams.get('limit')) || 6;
+	const locale = url.searchParams.get('locale') || undefined;
 
-	const result = search({ q, tag, cursor, sort, limit });
+	const result = search({ q, tag, cursor, sort, limit, locale });
 	return json(result);
 };

@@ -82,8 +82,39 @@
 		</div>
 	</div>
 
-	<div class="mt-24 text-center">
-		<Heading level={2} size="2xl">Trusted by teams worldwide</Heading>
-		<p class="mt-4 text-fg-muted">Join thousands of developers shipping faster with Demo Co.</p>
+	<div class="mt-24">
+		<Heading level={2} size="2xl" class="mb-12 text-center">Trusted by teams worldwide</Heading>
+		<div class="grid gap-8 md:grid-cols-3">
+			<Card padding="lg" class="border-border">
+				<p class="text-sm italic text-fg-muted leading-relaxed">"We cut our Lighthouse scores review time by 80% after switching to this stack. The streaming SSR alone made our product page feel instant."</p>
+				<div class="mt-4 flex items-center gap-3">
+					<div class="flex h-10 w-10 items-center justify-center rounded-full bg-primary/10 text-sm font-bold text-primary">SK</div>
+					<div>
+						<p class="text-sm font-semibold text-fg">Sarah Kim</p>
+						<p class="text-xs text-fg-muted">CTO, ScaleFast</p>
+					</div>
+				</div>
+			</Card>
+			<Card padding="lg" class="border-border">
+				<p class="text-sm italic text-fg-muted leading-relaxed">"The design token system is a game-changer. We ship light and dark mode simultaneously and our design team actually approves of the output."</p>
+				<div class="mt-4 flex items-center gap-3">
+					<div class="flex h-10 w-10 items-center justify-center rounded-full bg-success/10 text-sm font-bold text-success">MR</div>
+					<div>
+						<p class="text-sm font-semibold text-fg">Marcus Rivera</p>
+						<p class="text-xs text-fg-muted">Lead Engineer, DataPulse</p>
+					</div>
+				</div>
+			</Card>
+			<Card padding="lg" class="border-border">
+				<p class="text-sm italic text-fg-muted leading-relaxed">"Internationalization was painful before. Now it's just a folder and a URL parameter. We launched in Germany three weeks faster than planned."</p>
+				<div class="mt-4 flex items-center gap-3">
+					<div class="flex h-10 w-10 items-center justify-center rounded-full bg-warning/10 text-sm font-bold text-warning">AL</div>
+					<div>
+						<p class="text-sm font-semibold text-fg">Aiko Lindström</p>
+						<p class="text-xs text-fg-muted">VP Product, Nordik</p>
+					</div>
+				</div>
+			</Card>
+		</div>
 	</div>
 </Container>

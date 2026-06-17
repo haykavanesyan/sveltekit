@@ -23,7 +23,7 @@
 		if (!nextCursor || loading) return;
 		loading = true;
 		try {
-			const res = await fetch(`/api/posts?cursor=${nextCursor}&limit=6`);
+			const res = await fetch(`/api/posts?cursor=${nextCursor}&limit=6&locale=${locale}`);
 			const result = await res.json();
 			posts = [...posts, ...result.posts];
 			nextCursor = result.nextCursor;
