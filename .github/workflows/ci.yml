@@ -27,6 +27,8 @@ jobs:
 
       - run: npx svelte-kit sync && npx svelte-check --tsconfig ./tsconfig.json
 
+      - run: npx svelte-kit sync && npx tsc --noEmit
+
       - run: npm run test:unit
 
       - run: npm run build
@@ -43,6 +45,7 @@ jobs:
 
       - name: Lighthouse CI
         run: |
-          npx lhci autorun --collect.staticDistDir=./build --collect.url=http://localhost:4173/en --collect.url=http://localhost:4173/en/blog --collect.url=http://localhost:4173/en/login --upload.target=temporary-public-storage || echo "Lighthouse CI failed"
+          npm install -g @lhci/cli
+          npx lhci autorun --config=lighthouserc.js || echo "Lighthouse CI failed"
 
       - run: npm run size
