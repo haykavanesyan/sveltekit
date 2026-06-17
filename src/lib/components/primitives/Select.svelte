@@ -142,6 +142,7 @@
 <div class={['flex flex-col gap-1.5', className].filter(Boolean).join(' ')}>
 	{#if label}
 		<label for={selectId} class={["text-sm font-medium text-fg", hideLabel ? "sr-only" : ""].filter(Boolean).join(' ')}>{label}</label>
+	{/if}
 	{#if !label || hideLabel}
 		<span id={`${selectId}-label`} class="sr-only">{label || name || selectId}</span>
 	{/if}
