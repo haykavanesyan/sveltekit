@@ -1,5 +1,5 @@
 import { describe, it, expect } from 'vitest';
-import { createT } from '$lib/i18n/runtime';
+import { createT } from '$lib/i18n/runtime.svelte';
 
 const enDict = {
 	hello: 'Hello',

@@ -15,6 +15,7 @@
 		sortDir = 'desc' as 'asc' | 'desc',
 		locale = 'en',
 		userRole = 'viewer',
+		t,
 		onsort,
 		onpage,
 		onedit
@@ -28,6 +29,7 @@
 		sortDir?: 'asc' | 'desc';
 		locale?: string;
 		userRole?: string;
+		t?: (key: string, params?: Record<string, string | number>) => string;
 		onsort?: (column: string) => void;
 		onpage?: (p: number) => void;
 		onedit?: (item: Item, budget: number) => void;
@@ -70,16 +72,20 @@
 		return sortDir === 'asc' ? ' ▲' : ' ▼';
 	}
 
-	const columns = [
-		{ key: 'name', label: 'Name', sortable: true, mobile: true },
-		{ key: 'status', label: 'Status', sortable: true, mobile: true },
-		{ key: 'channel', label: 'Channel', sortable: true, mobile: false },
-		{ key: 'owner', label: 'Owner', sortable: true, mobile: false },
-		{ key: 'budget', label: 'Budget', sortable: true, mobile: true },
-		{ key: 'spent', label: 'Spent', sortable: true, mobile: false },
-		{ key: 'ctr', label: 'CTR', sortable: true, mobile: false },
-		{ key: 'updatedAt', label: 'Updated', sortable: true, mobile: false }
-	];
+	function translate(key: string): string {
+		return t ? t(key) : key;
+	}
+
+	const columns = $derived([
+		{ key: 'name', label: translate('dashboard.items.column.name'), sortable: true, mobile: true },
+		{ key: 'status', label: translate('dashboard.items.column.status'), sortable: true, mobile: true },
+		{ key: 'channel', label: translate('dashboard.items.column.channel'), sortable: true, mobile: false },
+		{ key: 'owner', label: translate('dashboard.items.column.owner'), sortable: true, mobile: false },
+		{ key: 'budget', label: translate('dashboard.items.column.budget'), sortable: true, mobile: true },
+		{ key: 'spent', label: translate('dashboard.items.column.spent'), sortable: true, mobile: false },
+		{ key: 'ctr', label: translate('dashboard.items.column.ctr'), sortable: true, mobile: false },
+		{ key: 'updatedAt', label: translate('dashboard.items.column.updated'), sortable: true, mobile: false }
+	]);
 
 	const statusVariant: Record<string, 'success' | 'warning' | 'danger' | 'info' | 'default'> = {
 		active: 'success',
@@ -92,8 +98,8 @@
 </script>
 
 <div class="overflow-x-auto rounded-lg border border-border">
-	<table class="w-full table-fixed text-left text-sm" role="grid" aria-label="Campaigns table">
-		<caption class="sr-only">Campaigns data table with sortable columns and inline edit</caption>
+	<table class="w-full table-fixed text-left text-sm" role="grid" aria-label={t ? t('dataTable.ariaLabel') : 'Campaigns table'}>
+		<caption class="sr-only">{t ? t('dataTable.caption') : 'Campaigns data table with sortable columns and inline edit'}</caption>
 		<thead class="border-b border-border bg-bg-muted">
 			<tr>
 				{#each columns as col (col.key)}
@@ -109,7 +115,7 @@
 							<button
 								onclick={() => handleSort(col.key)}
 								class="flex w-full cursor-pointer items-center justify-between font-medium text-fg-muted hover:text-fg"
-								aria-label="Sort by {col.label}{sortBy === col.key ? ', currently ' + sortDir + 'ending' : ''}"
+								aria-label="Sort by {col.label}{sortBy === col.key ? `, currently ${sortDir}ending` : ''}"
 							>
 								<span class="truncate">{col.label}</span>
 								<span class="ml-2 shrink-0 text-[0.6em]">{getSortIndicator(col.key)}</span>
@@ -133,7 +139,7 @@
 			{:else if rows.length === 0}
 				<tr>
 					<td colspan={columns.length} class="px-4 py-12 text-center text-fg-muted">
-						No campaigns match your filters.
+						{t ? t('campaigns.empty') : 'No campaigns match your filters.'}
 					</td>
 				</tr>
 			{:else}

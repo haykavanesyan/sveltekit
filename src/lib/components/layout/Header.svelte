@@ -1,13 +1,15 @@
 <script lang="ts">
 	import LocaleSwitcher from './LocaleSwitcher.svelte';
 	import ThemeSwitcher from './ThemeSwitcher.svelte';
+	import { getT } from '$lib/i18n/runtime.svelte';
 	import { page } from '$app/stores';
 
-	let { locale, t, user }: {
+	let { locale, user }: {
 		locale: string;
-		t: (key: string) => string;
 		user?: { name: string; role: string } | null;
 	} = $props();
+
+	const t = getT();
 
 	let menuOpen = $state(false);
 	
@@ -18,9 +20,9 @@
 </script>
 
 <header class="sticky top-0 z-40 border-b border-border bg-bg/95 backdrop-blur supports-[backdrop-filter]:bg-bg/80">
-	<nav class="mx-auto flex h-16 max-w-7xl items-center justify-between px-4" aria-label="Main navigation">
+	<nav class="mx-auto flex h-16 max-w-7xl items-center justify-between px-4" aria-label={t('nav.mainAria')}>
 		<div class="flex items-center gap-8">
-			<a href="/{locale}" class="text-lg font-bold text-fg">Demo Co.</a>
+			<a href="/{locale}" class="text-lg font-bold text-fg">{t('brand.name')}</a>
 			<div class="hidden items-center gap-6 md:flex">
 				<a href="/{locale}" class="text-sm {isActive(`/${locale}`) ? 'font-semibold text-fg' : 'text-fg-muted hover:text-fg'}">{t('nav.home')}</a>
 				<a href="/{locale}/blog" class="text-sm {isActive(`/${locale}/blog`) ? 'font-semibold text-fg' : 'text-fg-muted hover:text-fg'}">{t('nav.blog')}</a>
@@ -49,7 +51,7 @@
 			<button
 				class="inline-flex cursor-pointer items-center md:hidden"
 				onclick={() => (menuOpen = !menuOpen)}
-				aria-label="Toggle navigation menu"
+				aria-label={t('nav.menuToggle')}
 				aria-expanded={menuOpen}
 			>
 				<svg class="h-6 w-6 text-fg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">

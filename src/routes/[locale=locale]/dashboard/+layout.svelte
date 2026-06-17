@@ -1,6 +1,6 @@
 <script lang="ts">
 	import SeoHead from '$lib/components/layout/SeoHead.svelte';
-	import { createT } from '$lib/i18n/runtime';
+	import { createT } from '$lib/i18n/runtime.svelte';
 	import { page } from '$app/stores';
 
 	let { data: _data, children }: {

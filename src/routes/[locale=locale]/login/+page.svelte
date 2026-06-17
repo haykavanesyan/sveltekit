@@ -4,7 +4,7 @@
 	import Input from '$lib/components/primitives/Input.svelte';
 	import Button from '$lib/components/primitives/Button.svelte';
 	import SeoHead from '$lib/components/layout/SeoHead.svelte';
-	import { getT } from '$lib/i18n/runtime';
+	import { getT } from '$lib/i18n/runtime.svelte';
 	import { LoginSchema } from '$lib/schemas/auth';
 	import { enhance } from '$app/forms';
 

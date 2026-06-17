@@ -2,7 +2,7 @@
 	import Container from '$lib/components/primitives/Container.svelte';
 	import Badge from '$lib/components/primitives/Badge.svelte';
 	import SeoHead from '$lib/components/layout/SeoHead.svelte';
-	import { createT } from '$lib/i18n/runtime';
+	import { createT } from '$lib/i18n/runtime.svelte';
 	import { formatDate } from '$lib/utils/formatters';
 	import type { Post } from '$lib/schemas/post';
 	import type { Tag } from '$lib/schemas/tag';

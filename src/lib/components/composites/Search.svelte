@@ -1,11 +1,14 @@
 <script lang="ts">
 	import Input from '$lib/components/primitives/Input.svelte';
+	import { getT } from '$lib/i18n/runtime.svelte';
 
 	let { value = $bindable(), placeholder, onsearch }: {
 		value?: string | undefined;
 		placeholder?: string;
 		onsearch?: (value: string | undefined) => void;
 	} = $props();
+
+	const t = getT();
 
 	function handleKeydown(e: KeyboardEvent) {
 		if (e.key === 'Enter') {
@@ -28,6 +31,6 @@
 		onclick={() => onsearch?.(value)}
 		class="cursor-pointer rounded-md bg-primary px-4 py-2 text-sm font-medium text-fg-inverse transition-colors hover:bg-primary/90"
 	>
-		Search
+		{t('common.search')}
 	</button>
 </div>

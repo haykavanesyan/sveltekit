@@ -4,7 +4,7 @@
 	import Search from '$lib/components/composites/Search.svelte';
 	import Select from '$lib/components/primitives/Select.svelte';
 	import DataTable from '$lib/components/composites/DataTable.svelte';
-	import { createT } from '$lib/i18n/runtime';
+	import { createT } from '$lib/i18n/runtime.svelte';
 	import { decodeItemsFilter } from '$lib/utils/url-state';
 	import { toast } from '$lib/stores/toast.svelte';
 	import type { Item } from '$lib/schemas/item';
@@ -92,23 +92,23 @@
 				body: JSON.stringify({ budget: newBudget })
 			});
 			if (!res.ok) throw new Error('Patch failed');
-			toast.add('Budget updated', 'success');
+			toast.add(t('campaigns.toast.updated'), 'success');
 			await invalidate((url) => url.pathname.includes('/dashboard/campaigns'));
 		} catch {
 			item.budget = prevBudget;
-			toast.add('Failed to update budget. Reverted.', 'error');
+			toast.add(t('campaigns.toast.failed'), 'error');
 		}
 	}
 
-	const filterOptions = [
-		{ value: '', label: 'All statuses' },
-		{ value: 'active', label: 'Active' },
-		{ value: 'draft', label: 'Draft' },
-		{ value: 'scheduled', label: 'Scheduled' },
-		{ value: 'paused', label: 'Paused' },
-		{ value: 'completed', label: 'Completed' },
-		{ value: 'archived', label: 'Archived' }
-	];
+	const filterOptions = $derived([
+		{ value: '', label: t('campaigns.filter.all') },
+		{ value: 'active', label: t('campaigns.filter.active') },
+		{ value: 'draft', label: t('campaigns.filter.draft') },
+		{ value: 'scheduled', label: t('campaigns.filter.scheduled') },
+		{ value: 'paused', label: t('campaigns.filter.paused') },
+		{ value: 'completed', label: t('campaigns.filter.completed') },
+		{ value: 'archived', label: t('campaigns.filter.archived') }
+	]);
 </script>
 
 <Container size="full" class="py-8">
@@ -145,6 +145,7 @@
 			sortDir={filter.sortDir ?? 'desc'}
 			locale={locale}
 			userRole={data.user?.role ?? 'viewer'}
+			{t}
 			onsort={handleSort}
 			onpage={handlePage}
 			onedit={handleEdit}

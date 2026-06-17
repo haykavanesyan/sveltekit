@@ -1,5 +1,8 @@
 <script lang="ts">
 	import { focusTrap } from '$lib/actions/focusTrap';
+	import { getT } from '$lib/i18n/runtime.svelte';
+
+	const t = getT();
 
 	let { open = false, onclose, title, children }: {
 		open?: boolean;
@@ -55,11 +58,11 @@
 			role="document"
 		>
 			<div class="flex items-center justify-between border-b border-border px-6 py-4">
-				<h2 id={titleId} class="text-lg font-semibold text-fg">{title || 'Dialog'}</h2>
+				<h2 id={titleId} class="text-lg font-semibold text-fg">{title || t('dialog.close')}</h2>
 				<button
 					onclick={onclose}
 					class="cursor-pointer rounded-md p-1 text-fg-muted hover:bg-bg-muted hover:text-fg"
-					aria-label="Close dialog"
+					aria-label={t('dialog.close')}
 				>
 					<svg class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
 						<path fill-rule="evenodd" d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z" clip-rule="evenodd" />

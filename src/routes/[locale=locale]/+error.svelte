@@ -1,7 +1,7 @@
 <script lang="ts">
 	import Container from '$lib/components/primitives/Container.svelte';
 	import { page } from '$app/stores';
-	import { createT } from '$lib/i18n/runtime';
+	import { createT } from '$lib/i18n/runtime.svelte';
 
 	let locale = $derived(($page.params.locale as 'en' | 'de') || 'en');
 	let t = $derived(createT(locale));
@@ -9,8 +9,8 @@
 	let is404 = $derived(status === 404);
 	let message = $derived(
 		is404
-			? 'The page you\'re looking for doesn\'t exist.'
-			: $page.error?.message || t('common.error')
+			? t('error.notFoundMessage')
+			: $page.error?.message || t('error.genericMessage')
 	);
 </script>
 
@@ -22,7 +22,7 @@
 <Container size="sm" class="py-20 text-center">
 	<h1 class="text-7xl font-bold text-fg">{status}</h1>
 	<p class="mt-4 text-xl text-fg-muted">
-		{is404 ? 'Page not found' : 'Something went wrong'}
+		{is404 ? t('error.pageNotFound') : t('error.somethingWentWrong')}
 	</p>
 	<p class="mt-2 text-fg-muted">{message}</p>
 	<div class="mt-8 flex items-center justify-center gap-4">

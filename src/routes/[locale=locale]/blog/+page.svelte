@@ -3,7 +3,7 @@
 	import PostCard from '$lib/components/composites/PostCard.svelte';
 	import Button from '$lib/components/primitives/Button.svelte';
 	import SeoHead from '$lib/components/layout/SeoHead.svelte';
-	import { createT } from '$lib/i18n/runtime';
+	import { createT } from '$lib/i18n/runtime.svelte';
 	import { page } from '$app/stores';
 	import type { Post } from '$lib/schemas/post';
 	import type { Tag } from '$lib/schemas/tag';
@@ -37,7 +37,7 @@
 
 <SeoHead
 	title={t('blog.title')}
-	description="Read our latest articles."
+	description={t('blog.description')}
 	{locale}
 	path="/blog"
 />
@@ -63,14 +63,14 @@
 	{#if nextCursor}
 		<div class="mt-8 flex justify-center">
 			<Button onclick={loadMore} loading={loading} variant="secondary" size="lg">
-				Load more
+				{t('blog.loadMore')}
 			</Button>
 		</div>
 	{/if}
 
 	{#if data.total > 0}
 		<p class="mt-4 text-center text-sm text-fg-muted">
-			Showing {posts.length} of {data.total} posts
+			{t('blog.showingCount', { count: posts.length, total: data.total })}
 		</p>
 	{/if}
 </Container>

@@ -7,22 +7,54 @@ export type Locale = 'en' | 'de';
 const CTX_LOCALE = 'locale';
 const CTX_T = 't';
 
-export function setLocaleContext(locale: Locale) {
-	setContext(CTX_LOCALE, locale);
-	const t = createT(locale);
+export function setLocaleContext(initialLocale: Locale) {
+	let locale = $state<Locale>(initialLocale);
+
+	const localeState = {
+		get value() {
+			return locale;
+		},
+		set value(v: Locale) {
+			locale = v;
+		}
+	};
+	setContext(CTX_LOCALE, localeState);
+
+	const t = (key: string, params?: Record<string, string | number>) => {
+		const resolved = dictionaries[localeState.value];
+		let value = resolved[key] || key;
+		if (params) {
+			for (const [k, v] of Object.entries(params)) {
+				value = value.replace(`{${k}}`, String(v));
+			}
+		}
+		return value;
+	};
 	setContext(CTX_T, t);
-	return { locale, t };
+
+	return {
+		get locale() {
+			return localeState.value;
+		},
+		set locale(v: Locale) {
+			localeState.value = v;
+		},
+		t
+	};
 }
 
 export function getLocale(): Locale {
-	return getContext<Locale>(CTX_LOCALE);
+	return getContext<{ value: Locale }>(CTX_LOCALE).value;
 }
 
 export function getT(): (key: string, params?: Record<string, string | number>) => string {
 	return getContext<(key: string, params?: Record<string, string | number>) => string>(CTX_T);
 }
 
-export function createT(locale: Locale, dict?: Dict): (key: string, params?: Record<string, string | number>) => string {
+export function createT(
+	locale: Locale,
+	dict?: Dict
+): (key: string, params?: Record<string, string | number>) => string {
 	const resolved: Dict = dict || dictionaries[locale];
 	return (key: string, params?: Record<string, string | number>) => {
 		let value = resolved[key];

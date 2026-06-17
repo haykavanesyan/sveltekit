@@ -5,7 +5,7 @@
 	import Select from '$lib/components/primitives/Select.svelte';
 	import Pagination from '$lib/components/composites/Pagination.svelte';
 	import SeoHead from '$lib/components/layout/SeoHead.svelte';
-	import { createT } from '$lib/i18n/runtime';
+	import { createT } from '$lib/i18n/runtime.svelte';
 import { goto } from '$app/navigation';
 import { page } from '$app/stores';
 import { SvelteURLSearchParams } from 'svelte/reactivity';
@@ -41,7 +41,7 @@ import { SvelteURLSearchParams } from 'svelte/reactivity';
 
 <SeoHead
 	title={t('search.results', { count: data.total, query: query || '...' })}
-	description="Search blog posts"
+	description={t('search.description')}
 	locale={locale}
 	path="/search"
 />
@@ -59,15 +59,15 @@ import { SvelteURLSearchParams } from 'svelte/reactivity';
 		</div>
 		<Select
 			name="tag"
-			options={[{ value: '', label: 'All tags' }, ...data.tags.map(t => ({ value: t.slug, label: (t.label as Record<string, string>)[locale] || t.slug }))]}
+			options={[{ value: '', label: t('search.allTags') }, ...data.tags.map(t => ({ value: t.slug, label: (t.label as Record<string, string>)[locale] || t.slug }))]}
 			bind:value={activeTag}
 			onchange={() => updateUrl(true)}
 		/>
 		<Select
 			name="sort"
 			options={[
-				{ value: 'date', label: 'Newest first' },
-				{ value: 'date_asc', label: 'Oldest first' }
+				{ value: 'date', label: t('search.sortNewest') },
+				{ value: 'date_asc', label: t('search.sortOldest') }
 			]}
 			bind:value={sort}
 			onchange={() => updateUrl(true)}

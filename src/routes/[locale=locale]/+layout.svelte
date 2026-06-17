@@ -5,7 +5,7 @@
 	import SeoHead from '$lib/components/layout/SeoHead.svelte';
 	import ErrorBoundary from '$lib/components/composites/ErrorBoundary.svelte';
 	import Toast from '$lib/components/primitives/Toast.svelte';
-	import { setLocaleContext, createT } from '$lib/i18n/runtime';
+	import { setLocaleContext } from '$lib/i18n/runtime.svelte';
 	import { onMount } from 'svelte';
 	import { initWebVitals } from '$lib/utils/web-vitals';
 	import { initErrorReporting } from '$lib/utils/error-reporting';
@@ -16,8 +16,13 @@
 		children?: import('svelte').Snippet;
 	} = $props();
 
-	setLocaleContext(data.locale);
-	let t = $derived(createT(data.locale));
+	const i18n = setLocaleContext(data.locale);
+
+	$effect(() => {
+		i18n.locale = data.locale;
+	});
+
+	let t = $derived(i18n.t);
 
 	let user = $derived(data.user);
 
@@ -36,12 +41,12 @@
 <div class="flex min-h-svh flex-col">
 	<SkipLink {t} />
 	<SeoHead
-		title="Demo Co."
-		description="A performance-first stack for teams that ship."
+		title={t('brand.name')}
+		description={t('seo.description')}
 		locale={data.locale}
 		path={$page.url.pathname.replace(/^\/(en|de)/, '') || '/'}
 	/>
-	<Header locale={data.locale} {t} {user} />
+	<Header locale={data.locale} {user} />
 	<main id="main-content" class="flex-1">
 		<ErrorBoundary>
 			{@render children?.()}

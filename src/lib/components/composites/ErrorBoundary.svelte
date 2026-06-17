@@ -1,5 +1,8 @@
 <script lang="ts">
 	import { browser } from '$app/environment';
+	import { getT } from '$lib/i18n/runtime.svelte';
+
+	const t = getT();
 
 	let { children, fallback }: {
 		children?: import('svelte').Snippet;
@@ -60,13 +63,13 @@
 		{@render fallback(caught)}
 	{:else}
 		<div role="alert" class="flex flex-col items-center justify-center gap-4 p-8 text-center">
-			<p class="text-lg font-semibold text-danger">Something went wrong</p>
-			<p class="text-sm text-fg-muted">An unexpected error occurred. Please try refreshing the page.</p>
+			<p class="text-lg font-semibold text-danger">{t('error.somethingWentWrong')}</p>
+			<p class="text-sm text-fg-muted">{t('common.unexpectedError')}</p>
 			<button
 				onclick={() => location.reload()}
 				class="cursor-pointer rounded-lg bg-primary px-4 py-2 text-sm font-medium text-white hover:bg-primary/90"
 			>
-				Refresh page
+				{t('common.refreshPage')}
 			</button>
 		</div>
 	{/if}

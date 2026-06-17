@@ -1,4 +1,8 @@
 <script lang="ts">
+	import { getT } from '$lib/i18n/runtime.svelte';
+
+	const t = getT();
+
 	let { label, value = $bindable(), options, name, id, class: className = '', dropDownClassName = '', onchange, placeholder }: {
 		label?: string;
 		value?: string | null | undefined;
@@ -155,7 +159,7 @@
 			class="flex h-10 w-full cursor-pointer items-center justify-between rounded-md border border-border bg-bg px-3 text-sm text-fg transition-colors hover:border-fg-muted focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-border-focus disabled:cursor-not-allowed disabled:opacity-50"
 		>
 			<span class={[displayLabel ? 'text-fg' : 'text-fg-muted'].filter(Boolean).join(' ')}>
-				{displayLabel || 'Select…'}
+				{displayLabel || t('common.selectPlaceholder')}
 			</span>
 			<svg
 				class="h-4 w-4 shrink-0 text-fg-muted transition-transform {open ? 'rotate-180' : ''}"
@@ -202,7 +206,7 @@
 			</button>
 		{/each}
 		{#if options.length === 0}
-			<div class="whitespace-nowrap px-3 py-2 text-sm text-fg-muted">No options</div>
+			<div class="whitespace-nowrap px-3 py-2 text-sm text-fg-muted">{t('common.noOptions')}</div>
 		{/if}
 	</div>
 {/if}

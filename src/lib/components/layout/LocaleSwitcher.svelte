@@ -2,8 +2,11 @@
 	import Select from '$lib/components/primitives/Select.svelte';
 	import { browser } from '$app/environment';
 	import { goto } from '$app/navigation';
+	import { getT } from '$lib/i18n/runtime.svelte';
 
 	let { locale }: { locale: string } = $props();
+
+	const t = getT();
 
 	let value = $state(locale);
 
@@ -18,8 +21,8 @@
 	name="locale"
 	dropDownClassName="z-50"
 	options={[
-		{ value: 'en', label: 'English' },
-		{ value: 'de', label: 'Deutsch' }
+		{ value: 'en', label: t('locale.en') },
+		{ value: 'de', label: t('locale.de') }
 	]}
 	bind:value
 	onchange={handleChange}

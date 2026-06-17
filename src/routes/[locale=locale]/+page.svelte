@@ -4,31 +4,37 @@
 	import Button from '$lib/components/primitives/Button.svelte';
 	import Card from '$lib/components/primitives/Card.svelte';
 	import SeoHead from '$lib/components/layout/SeoHead.svelte';
-	import { getT, getLocale } from '$lib/i18n/runtime';
+	import { getT, getLocale } from '$lib/i18n/runtime.svelte';
 
 	const t = getT();
 	const locale = getLocale();
 
-	const features = [
-		{ title: 'Edge-first delivery', desc: 'Global CDN with sub-5ms cold starts for your public content.' },
-		{ title: 'Streaming SSR', desc: 'Skeleton-first rendering that gets content in front of users faster.' },
-		{ title: 'Zero-config i18n', desc: 'Multi-locale out of the box with URL-based routing and hreflang.' },
-		{ title: 'Design tokens', desc: 'Semantic CSS variables that power light and dark mode with zero effort.' }
-	];
+	const features = $derived([
+		{ title: t('home.features.0.title'), desc: t('home.features.0.desc') },
+		{ title: t('home.features.1.title'), desc: t('home.features.1.desc') },
+		{ title: t('home.features.2.title'), desc: t('home.features.2.desc') },
+		{ title: t('home.features.3.title'), desc: t('home.features.3.desc') }
+	]);
 
-	const pricing = [
-		{ name: 'Starter', price: '$29', desc: 'For small teams getting started.', cta: 'Get started' },
-		{ name: 'Pro', price: '$99', desc: 'For growing teams that need more.', cta: 'Get started', popular: true },
-		{ name: 'Enterprise', price: 'Custom', desc: 'For organizations at scale.', cta: 'Contact us' }
-	];
+	const pricing = $derived([
+		{ name: t('home.pricing.0.name'), price: t('home.pricing.0.price'), desc: t('home.pricing.0.desc'), cta: t('home.pricing.0.cta') },
+		{ name: t('home.pricing.1.name'), price: t('home.pricing.1.price'), desc: t('home.pricing.1.desc'), cta: t('home.pricing.1.cta'), popular: true },
+		{ name: t('home.pricing.2.name'), price: t('home.pricing.2.price'), desc: t('home.pricing.2.desc'), cta: t('home.pricing.2.cta') }
+	]);
 
-	const orgLd = JSON.stringify({
+	const testimonials = $derived([
+		{ quote: t('home.testimonials.0.quote'), name: t('home.testimonials.0.name'), role: t('home.testimonials.0.role'), initials: 'SK', color: 'bg-primary/10 text-primary' },
+		{ quote: t('home.testimonials.1.quote'), name: t('home.testimonials.1.name'), role: t('home.testimonials.1.role'), initials: 'MR', color: 'bg-success/10 text-success' },
+		{ quote: t('home.testimonials.2.quote'), name: t('home.testimonials.2.name'), role: t('home.testimonials.2.role'), initials: 'AL', color: 'bg-warning/10 text-warning' }
+	]);
+
+	const orgLd = $derived(JSON.stringify({
 		'@context': 'https://schema.org',
 		'@type': 'Organization',
-		name: 'Demo Co.',
+		name: t('brand.name'),
 		url: `https://example.com/${locale}`,
-		description: 'A performance-first stack for teams that ship.'
-	});
+		description: t('seo.description')
+	}));
 </script>
 
 <SeoHead
@@ -45,7 +51,7 @@
 		<p class="mt-4 text-lg text-fg-muted">{t('home.hero.subtitle')}</p>
 		<div class="mt-8 flex items-center justify-center gap-4">
 			<Button size="lg">{t('home.hero.cta')}</Button>
-			<Button variant="secondary" size="lg">Learn more</Button>
+			<Button variant="secondary" size="lg">{t('home.hero.learnMore')}</Button>
 		</div>
 	</div>
 
@@ -62,13 +68,13 @@
 	</div>
 
 	<div class="mt-24">
-		<Heading level={2} size="2xl" class="mb-12 text-center">Pricing</Heading>
+		<Heading level={2} size="2xl" class="mb-12 text-center">{t('home.pricing.title')}</Heading>
 		<div class="grid gap-8 md:grid-cols-3 items-stretch">
 			{#each pricing as p (p.name)}
 				<Card padding="lg" shadow={true} class="flex flex-col border-border">
 					<div class="flex-grow">
 						{#if p.popular}
-							<span class="mb-4 inline-block rounded-full bg-primary/10 px-3 py-1 text-xs font-semibold text-primary uppercase tracking-wide">Popular</span>
+							<span class="mb-4 inline-block rounded-full bg-primary/10 px-3 py-1 text-xs font-semibold text-primary uppercase tracking-wide">{t('home.pricing.popular')}</span>
 						{/if}
 						<h3 class="text-2xl font-bold text-fg">{p.name}</h3>
 						<p class="mt-4 text-4xl font-extrabold text-fg">{p.price}</p>
@@ -83,38 +89,20 @@
 	</div>
 
 	<div class="mt-24">
-		<Heading level={2} size="2xl" class="mb-12 text-center">Trusted by teams worldwide</Heading>
+		<Heading level={2} size="2xl" class="mb-12 text-center">{t('home.testimonials.title')}</Heading>
 		<div class="grid gap-8 md:grid-cols-3">
-			<Card padding="lg" class="border-border">
-				<p class="text-sm italic text-fg-muted leading-relaxed">"We cut our Lighthouse scores review time by 80% after switching to this stack. The streaming SSR alone made our product page feel instant."</p>
-				<div class="mt-4 flex items-center gap-3">
-					<div class="flex h-10 w-10 items-center justify-center rounded-full bg-primary/10 text-sm font-bold text-primary">SK</div>
-					<div>
-						<p class="text-sm font-semibold text-fg">Sarah Kim</p>
-						<p class="text-xs text-fg-muted">CTO, ScaleFast</p>
+			{#each testimonials as tst (tst.initials)}
+				<Card padding="lg" class="border-border">
+					<p class="text-sm italic text-fg-muted leading-relaxed">"{tst.quote}"</p>
+					<div class="mt-4 flex items-center gap-3">
+						<div class="flex h-10 w-10 items-center justify-center rounded-full text-sm font-bold {tst.color}">{tst.initials}</div>
+						<div>
+							<p class="text-sm font-semibold text-fg">{tst.name}</p>
+							<p class="text-xs text-fg-muted">{tst.role}</p>
+						</div>
 					</div>
-				</div>
-			</Card>
-			<Card padding="lg" class="border-border">
-				<p class="text-sm italic text-fg-muted leading-relaxed">"The design token system is a game-changer. We ship light and dark mode simultaneously and our design team actually approves of the output."</p>
-				<div class="mt-4 flex items-center gap-3">
-					<div class="flex h-10 w-10 items-center justify-center rounded-full bg-success/10 text-sm font-bold text-success">MR</div>
-					<div>
-						<p class="text-sm font-semibold text-fg">Marcus Rivera</p>
-						<p class="text-xs text-fg-muted">Lead Engineer, DataPulse</p>
-					</div>
-				</div>
-			</Card>
-			<Card padding="lg" class="border-border">
-				<p class="text-sm italic text-fg-muted leading-relaxed">"Internationalization was painful before. Now it's just a folder and a URL parameter. We launched in Germany three weeks faster than planned."</p>
-				<div class="mt-4 flex items-center gap-3">
-					<div class="flex h-10 w-10 items-center justify-center rounded-full bg-warning/10 text-sm font-bold text-warning">AL</div>
-					<div>
-						<p class="text-sm font-semibold text-fg">Aiko Lindström</p>
-						<p class="text-xs text-fg-muted">VP Product, Nordik</p>
-					</div>
-				</div>
-			</Card>
+				</Card>
+			{/each}
 		</div>
 	</div>
 </Container>
