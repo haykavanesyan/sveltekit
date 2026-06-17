@@ -13,7 +13,9 @@ export const load: PageServerLoad = async ({ cookies, params }) => {
 	throw redirect(303, `/${params.locale}/login`);
 };
 
-export const actions = {
+import type { Actions } from './$types';
+
+export const actions: Actions = {
 	default: async ({ cookies, params }) => {
 		const token = cookies.get('session');
 		if (token) {

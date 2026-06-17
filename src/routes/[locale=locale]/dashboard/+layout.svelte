@@ -8,8 +8,8 @@
 		children?: import('svelte').Snippet;
 	} = $props();
 
-	let locale = $derived($page.params.locale);
-	let t = $derived(createT(locale as 'en' | 'de'));
+	let locale = $derived(($page.params.locale ?? 'en') as 'en' | 'de');
+	let t = $derived(createT(locale));
 </script>
 
 <SeoHead
@@ -45,6 +45,6 @@
 		</a>
 	</nav>
 	<main class="min-w-0 flex-1">
-		{@render children()}
+		{@render children?.()}
 	</main>
 </div>

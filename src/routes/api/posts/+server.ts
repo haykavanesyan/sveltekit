@@ -1,9 +1,10 @@
 import { search } from '$lib/server/api/posts';
 import { json } from '@sveltejs/kit';
+import type { RequestHandler } from './$types';
 
 export const prerender = false;
 
-export function GET({ url }) {
+export const GET: RequestHandler = ({ url }) => {
 	const q = url.searchParams.get('q') || undefined;
 	const tag = url.searchParams.get('tag') || undefined;
 	const cursor = url.searchParams.get('cursor') || undefined;
@@ -12,4 +13,4 @@ export function GET({ url }) {
 
 	const result = search({ q, tag, cursor, sort, limit });
 	return json(result);
-}
+};

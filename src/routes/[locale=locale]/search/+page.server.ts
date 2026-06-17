@@ -1,11 +1,12 @@
 import { searchPage } from '$lib/server/api/posts';
 import { tags } from '$lib/server/database';
+import type { PageServerLoad } from './$types';
 
 export const config = { runtime: 'edge' };
 
 export const prerender = false;
 
-export function load({ url, params }) {
+export const load: PageServerLoad = ({ url, params }) => {
 	const q = url.searchParams.get('q') || undefined;
 	const tag = url.searchParams.get('tag') || undefined;
 	const sort = (url.searchParams.get('sort') || 'date') as 'date' | 'date_asc';

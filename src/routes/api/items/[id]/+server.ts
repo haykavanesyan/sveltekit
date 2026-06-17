@@ -1,8 +1,9 @@
 import { ItemPatchSchema } from '$lib/schemas/item';
 import { updateItem, NotFoundError } from '$lib/server/api/items';
 import { json } from '@sveltejs/kit';
+import type { RequestHandler } from './$types';
 
-export async function PATCH({ params, request, locals }) {
+export const PATCH: RequestHandler = async ({ params, request, locals }) => {
 	if (!locals.user) {
 		return new Response('Unauthorized', { status: 401 });
 	}
