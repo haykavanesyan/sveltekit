@@ -3,9 +3,11 @@
 	import Heading from '$lib/components/primitives/Heading.svelte';
 	import Button from '$lib/components/primitives/Button.svelte';
 	import Card from '$lib/components/primitives/Card.svelte';
-	import { getT } from '$lib/i18n/runtime';
+	import SeoHead from '$lib/components/layout/SeoHead.svelte';
+	import { getT, getLocale } from '$lib/i18n/runtime';
 
 	const t = getT();
+	const locale = getLocale();
 
 	const features = [
 		{ title: 'Edge-first delivery', desc: 'Global CDN with sub-5ms cold starts for your public content.' },
@@ -19,7 +21,23 @@
 		{ name: 'Pro', price: '$99', desc: 'For growing teams that need more.', cta: 'Get started', popular: true },
 		{ name: 'Enterprise', price: 'Custom', desc: 'For organizations at scale.', cta: 'Contact us' }
 	];
+
+	const orgLd = JSON.stringify({
+		'@context': 'https://schema.org',
+		'@type': 'Organization',
+		name: 'Demo Co.',
+		url: `https://example.com/${locale}`,
+		description: 'A performance-first stack for teams that ship.'
+	});
 </script>
+
+<SeoHead
+	title={t('home.hero.title')}
+	description={t('home.hero.subtitle')}
+	{locale}
+	path=""
+	jsonLd={orgLd}
+/>
 
 <Container size="lg" class="py-20">
 	<div class="mx-auto max-w-3xl text-center">

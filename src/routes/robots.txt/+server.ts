@@ -1,3 +1,5 @@
+export const prerender = true;
+
 export async function GET() {
 	const body = [
 		'User-agent: *',
@@ -5,7 +7,7 @@ export async function GET() {
 		'Disallow: /api/',
 		'Disallow: /dashboard/',
 		'',
-		`Sitemap: https://demo-sveltekit.vercel.app/sitemap.xml`
+		'Sitemap: https://example.com/sitemap.xml'
 	].join('\n');
 
 	return new Response(body, {
