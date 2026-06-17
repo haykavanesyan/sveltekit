@@ -19,6 +19,8 @@
 
 <Select
 	name="locale"
+	label={t('locale.label')}
+	hideLabel
 	dropDownClassName="z-50"
 	options={[
 		{ value: 'en', label: t('locale.en') },

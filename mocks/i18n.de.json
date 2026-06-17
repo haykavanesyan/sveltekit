@@ -124,6 +124,7 @@
   "theme.dark": "Zu dunklem Modus wechseln",
   "locale.en": "English",
   "locale.de": "Deutsch",
+  "locale.label": "Sprache wählen",
   "dataTable.caption": "Kampagnentabelle mit sortierbaren Spalten und Inline-Bearbeitung",
   "dataTable.ariaLabel": "Kampagnentabelle",
   "brand.name": "Demo Co.",

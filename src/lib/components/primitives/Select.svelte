@@ -3,8 +3,9 @@
 
 	const t = getT();
 
-	let { label, value = $bindable(), options, name, id, class: className = '', dropDownClassName = '', onchange, placeholder }: {
+	let { label, hideLabel = false, value = $bindable(), options, name, id, class: className = '', dropDownClassName = '', onchange, placeholder }: {
 		label?: string;
+		hideLabel?: boolean;
 		value?: string | null | undefined;
 		options: { value: string; label: string }[];
 		name?: string;
@@ -140,7 +141,9 @@
 
 <div class={['flex flex-col gap-1.5', className].filter(Boolean).join(' ')}>
 	{#if label}
-		<label for={selectId} class="text-sm font-medium text-fg">{label}</label>
+		<label for={selectId} class={["text-sm font-medium text-fg", hideLabel ? "sr-only" : ""].filter(Boolean).join(' ')}>{label}</label>
+	{#if !label || hideLabel}
+		<span id={`${selectId}-label`} class="sr-only">{label || name || selectId}</span>
 	{/if}
 	<div>
 		<button
@@ -153,7 +156,7 @@
 			aria-controls={`${selectId}-listbox`}
 			aria-haspopup="listbox"
 			aria-activedescendant={activeIdx >= 0 ? `${selectId}-opt-${activeIdx}` : undefined}
-			aria-label={!label ? (name || selectId) : undefined}
+			aria-labelledby={(!label || hideLabel) ? `${selectId}-label` : undefined}
 			onclick={toggle}
 			onkeydown={onKeydown}
 			class="flex h-10 w-full cursor-pointer items-center justify-between rounded-md border border-border bg-bg px-3 text-sm text-fg transition-colors hover:border-fg-muted focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-border-focus disabled:cursor-not-allowed disabled:opacity-50"
