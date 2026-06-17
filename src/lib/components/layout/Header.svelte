@@ -32,6 +32,8 @@
 			<div class="hidden md:flex md:items-center md:gap-4">
 				<LocaleSwitcher {locale} />
 				{#if user}
+					<span class="hidden md:block h-4 w-px bg-border" role="separator"></span>
+					<span class="rounded-full bg-bg-muted px-3 py-1 text-sm text-fg-muted">{user.name} <span class="text-xs text-fg-muted/70">({user.role})</span></span>
 					<a href="/{locale}/dashboard" class="text-sm font-medium text-primary hover:text-primary-hover">
 						{t('nav.dashboard')}
 					</a>
@@ -69,6 +71,7 @@
 				
 				<div class="my-2 border-t border-border pt-2">
 					{#if user}
+						<span class="block w-fit rounded-full bg-bg-muted px-3 py-1 text-sm text-fg-muted">{user.name} <span class="text-xs text-fg-muted/70">({user.role})</span></span>
 						<a href="/{locale}/dashboard" class="block py-2 text-sm font-medium text-primary" onclick={() => (menuOpen = false)}>
 							{t('nav.dashboard')}
 						</a>
