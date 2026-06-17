@@ -1,5 +1,4 @@
 <script lang="ts">
-	import Button from '$lib/components/primitives/Button.svelte';
 	import Badge from '$lib/components/primitives/Badge.svelte';
 	import Skeleton from '$lib/components/primitives/Skeleton.svelte';
 	import { formatCurrency, formatPercent, formatDate } from '$lib/utils/formatters';
@@ -52,6 +51,7 @@
 	}
 
 	function saveEdit(item: Item) {
+		if (editingId !== item.id) return;
 		if (onedit) onedit(item, editValue);
 		editingId = null;
 	}
@@ -96,7 +96,7 @@
 		<caption class="sr-only">Campaigns data table with sortable columns and inline edit</caption>
 		<thead class="border-b border-border bg-bg-muted">
 			<tr>
-				{#each columns as col}
+				{#each columns as col (col.key)}
 					<th
 						scope="col"
 						class={[
@@ -123,9 +123,9 @@
 		</thead>
 		<tbody>
 			{#if loading}
-				{#each { length: 5 } as _}
+				{#each { length: 5 } as _, i (i)}
 					<tr class="border-b border-border">
-						{#each columns as col}
+						{#each columns as col (col.key)}
 							<td class={["px-4 py-3", !col.mobile && "hidden lg:table-cell"].filter(Boolean).join(' ')}><Skeleton width="80%" height="1rem" /></td>
 						{/each}
 					</tr>

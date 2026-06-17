@@ -4,7 +4,7 @@
 	import SkipLink from '$lib/components/layout/SkipLink.svelte';
 	import SeoHead from '$lib/components/layout/SeoHead.svelte';
 	import Toast from '$lib/components/primitives/Toast.svelte';
-	import { setLocaleContext, getT, createT } from '$lib/i18n/runtime';
+	import { setLocaleContext, createT } from '$lib/i18n/runtime';
 	import { onMount } from 'svelte';
 	import { initWebVitals } from '$lib/utils/web-vitals';
 	import { initErrorReporting } from '$lib/utils/error-reporting';
@@ -15,7 +15,7 @@
 		children?: import('svelte').Snippet;
 	} = $props();
 
-	const ctx = setLocaleContext(data.locale);
+	setLocaleContext(data.locale);
 	let t = $derived(createT(data.locale));
 
 	let user = $derived(data.user);

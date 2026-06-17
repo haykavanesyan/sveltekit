@@ -36,7 +36,7 @@
 				&lsaquo;
 			</button>
 
-			{#each visiblePages() as p}
+			{#each visiblePages() as p (p)}
 				<button
 					onclick={() => onpage?.(p)}
 					class={[

@@ -3,7 +3,7 @@
 	import { createT } from '$lib/i18n/runtime';
 	import { page } from '$app/stores';
 
-	let { data, children }: {
+	let { data: _data, children }: {
 		data: { user: { name: string; role: string }; locale: string };
 		children?: import('svelte').Snippet;
 	} = $props();

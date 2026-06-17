@@ -6,7 +6,6 @@
 	import SeoHead from '$lib/components/layout/SeoHead.svelte';
 	import { getT } from '$lib/i18n/runtime';
 	import { LoginSchema } from '$lib/schemas/auth';
-	import { page } from '$app/stores';
 	import { enhance } from '$app/forms';
 
 	let { data, form } = $props();

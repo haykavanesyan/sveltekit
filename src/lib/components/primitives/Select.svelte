@@ -149,6 +149,7 @@
 			aria-controls={`${selectId}-listbox`}
 			aria-haspopup="listbox"
 			aria-activedescendant={activeIdx >= 0 ? `${selectId}-opt-${activeIdx}` : undefined}
+			aria-label={!label ? (name || selectId) : undefined}
 			onclick={toggle}
 			onkeydown={onKeydown}
 			class="flex h-10 w-full cursor-pointer items-center justify-between rounded-md border border-border bg-bg px-3 text-sm text-fg transition-colors hover:border-fg-muted focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-border-focus disabled:cursor-not-allowed disabled:opacity-50"
@@ -177,7 +178,7 @@
 		role="listbox"
 		id={`${selectId}-listbox`}
 	>
-		{#each options as opt, i}
+		{#each options as opt, i (opt.value || i)}
 			<button
 				type="button"
 				role="option"

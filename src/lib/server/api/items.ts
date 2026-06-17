@@ -33,7 +33,7 @@ export function getItems(filter: ItemsFilter): {
 	const sortField = sortBy || 'updatedAt';
 	const dir = sortDir || 'desc';
 	filtered.sort((a, b) => {
-		let cmp = 0;
+		let cmp: number;
 		switch (sortField) {
 			case 'name':
 				cmp = a.name.localeCompare(b.name);
@@ -73,7 +73,7 @@ export function getItems(filter: ItemsFilter): {
 }
 
 export function getCount(filter: ItemsFilter): { total: number; totalPages: number } {
-	const { items, total, totalPages } = getItems(filter);
+	const { total, totalPages } = getItems(filter);
 	return { total, totalPages };
 }
 

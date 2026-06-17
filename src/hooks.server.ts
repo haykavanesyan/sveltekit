@@ -5,7 +5,7 @@ import { redirect } from '@sveltejs/kit';
 const LOCALES = ['en', 'de'] as const;
 
 export const handle: Handle = async ({ event, resolve }) => {
-	const { url, cookies, params } = event;
+	const { url, cookies } = event;
 
 	if (url.pathname === '/') {
 		const accept = event.request.headers.get('accept-language') || 'en';

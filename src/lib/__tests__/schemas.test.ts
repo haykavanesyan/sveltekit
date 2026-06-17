@@ -1,6 +1,6 @@
 import { describe, it, expect } from 'vitest';
 import { LoginSchema } from '$lib/schemas/auth';
-import { ItemPatchSchema, ItemsFilterSchema } from '$lib/schemas/item';
+import { ItemPatchSchema } from '$lib/schemas/item';
 
 describe('LoginSchema', () => {
 	it('validates valid input', () => {

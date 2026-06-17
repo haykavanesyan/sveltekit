@@ -52,7 +52,7 @@
 	<div class="mt-24">
 		<Heading level={2} size="2xl" class="mb-12 text-center">{t('home.features.title')}</Heading>
 		<div class="grid gap-8 md:grid-cols-2">
-			{#each features as f}
+			{#each features as f (f.title)}
 				<Card padding="lg" class="border-border hover:border-primary transition-colors">
 					<h3 class="text-xl font-semibold text-fg">{f.title}</h3>
 					<p class="mt-3 text-fg-muted">{f.desc}</p>
@@ -64,7 +64,7 @@
 	<div class="mt-24">
 		<Heading level={2} size="2xl" class="mb-12 text-center">Pricing</Heading>
 		<div class="grid gap-8 md:grid-cols-3 items-stretch">
-			{#each pricing as p}
+			{#each pricing as p (p.name)}
 				<Card padding="lg" shadow={true} class="flex flex-col border-border">
 					<div class="flex-grow">
 						{#if p.popular}

@@ -4,7 +4,7 @@ import { error } from '@sveltejs/kit';
 export const prerender = true;
 
 export function entries() {
-	return ['en', 'de'].flatMap((locale) =>
+	return ['en', 'de'].flatMap((_) =>
 		['sub-second-lcp', 'pragmatic-design-tokens', 'spa-default', 'accessible-combobox', 'form-library',
 		 'streaming-ssr', 'error-states', 'edge-node-comparison', 'bundle-size', 'keyboard-first',
 		 'extra-round-trip', 'shipping-ai', 'performance', 'design-tokens', 'engineering',

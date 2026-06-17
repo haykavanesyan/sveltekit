@@ -6,8 +6,9 @@
 	import Pagination from '$lib/components/composites/Pagination.svelte';
 	import SeoHead from '$lib/components/layout/SeoHead.svelte';
 	import { createT } from '$lib/i18n/runtime';
-	import { goto } from '$app/navigation';
-	import { page } from '$app/stores';
+import { goto } from '$app/navigation';
+import { page } from '$app/stores';
+import { SvelteURLSearchParams } from 'svelte/reactivity';
 
 	let { data }: { data: { items: import('$lib/schemas/post').Post[]; page: number; totalPages: number; total: number; query: string; activeTag: string; sort: string; locale: string; tags: import('$lib/schemas/tag').Tag[] } } = $props();
 
@@ -19,7 +20,7 @@
 	let sort = $state(data.sort);
 
 	function updateUrl(resetPage = true) {
-		const sp = new URLSearchParams();
+		const sp = new SvelteURLSearchParams();
 		if (query) sp.set('q', query);
 		if (activeTag) sp.set('tag', activeTag);
 		if (sort && sort !== 'date') sp.set('sort', sort);
@@ -28,7 +29,7 @@
 	}
 
 	function goToPage(p: number) {
-		const sp = new URLSearchParams(location.search);
+		const sp = new SvelteURLSearchParams(location.search);
 		if (query) sp.set('q', query);
 		if (activeTag) sp.set('tag', activeTag);
 		if (sort && sort !== 'date') sp.set('sort', sort);
@@ -84,7 +85,7 @@
 	{/if}
 
 	<div class="mt-6 grid gap-6 md:grid-cols-2 lg:grid-cols-3">
-		{#each data.items as post}
+		{#each data.items as post (post.id)}
 			<PostCard {post} locale={locale} tags={data.tags} />
 		{/each}
 	</div>

@@ -7,8 +7,9 @@
 	import { createT } from '$lib/i18n/runtime';
 	import { decodeItemsFilter } from '$lib/utils/url-state';
 	import type { Item } from '$lib/schemas/item';
-	import { page } from '$app/stores';
-	import { goto } from '$app/navigation';
+import { page } from '$app/stores';
+import { goto } from '$app/navigation';
+import { SvelteURLSearchParams } from 'svelte/reactivity';
 
 	let { data }: {
 		data: {
@@ -33,8 +34,8 @@
 	$effect(() => {
 		const newFilter = decodeItemsFilter($page.url);
 		// Only update if non-q fields changed
-		const { q: _, ...currentWithoutQ } = filter;
-		const { q: __, ...newWithoutQ } = newFilter;
+		const { q: _q, ...currentWithoutQ } = filter;
+		const { q: _q2, ...newWithoutQ } = newFilter;
 		if (JSON.stringify(newWithoutQ) !== JSON.stringify(currentWithoutQ)) {
 			filter = { ...newFilter, q: filter.q };
 		}
@@ -54,7 +55,7 @@
 	});
 
 	function updateUrl() {
-		const sp = new URLSearchParams();
+		const sp = new SvelteURLSearchParams();
 		if (filter.q) sp.set('q', filter.q);
 		if (filter.status) sp.set('status', filter.status);
 		if (filter.sortBy) sp.set('sortBy', filter.sortBy);

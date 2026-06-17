@@ -23,7 +23,7 @@
 		<div class="h-20" style="background-color: {post.coverColor}"></div>
 		<div class="p-4">
 			<div class="flex flex-wrap gap-2">
-				{#each post.tags as tag}
+				{#each post.tags as tag (tag)}
 					<Badge variant="default">{getTagLabel(tag)}</Badge>
 				{/each}
 			</div>

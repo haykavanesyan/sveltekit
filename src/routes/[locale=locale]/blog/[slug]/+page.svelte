@@ -53,7 +53,7 @@
 
 <Container size="sm" class="py-12">
 	<div class="flex flex-wrap gap-2">
-		{#each data.post.tags as tag}
+		{#each data.post.tags as tag (tag)}
 			<Badge variant="info">{getTagLabel(tag)}</Badge>
 		{/each}
 	</div>

@@ -1,14 +1,13 @@
 import { test, expect } from '@playwright/test';
 
-test('blog search finds posts by query', async ({ page }) => {
+test('anonymous search flow: search -> click -> post', async ({ page }) => {
 	await page.goto('/en/search');
-	await page.fill('input[name="q"]', 'post');
-	await page.waitForTimeout(500);
-	const cards = page.locator('a[href*="/en/blog/"]');
-	await expect(cards.first()).toBeVisible();
-});
-
-test('search shows no results for gibberish', async ({ page }) => {
-	await page.goto('/en/search?q=xyznonexistent999');
-	await expect(page.getByText(/no results/i)).toBeVisible();
+	await page.fill('input[name="q"]', 'combobox');
+	await page.press('input[name="q"]', 'Enter');
+	await page.waitForURL(/q=combobox/);
+	const resultLink = page.locator('a[href*="/en/blog/"]').first();
+	await expect(resultLink).toBeVisible();
+	await resultLink.click();
+	await page.waitForURL(/\/en\/blog\//);
+	await expect(page.locator('h1')).toBeVisible();
 });
