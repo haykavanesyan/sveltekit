@@ -16,7 +16,7 @@
 		children?: import('svelte').Snippet;
 	} = $props();
 
-	const i18n = setLocaleContext(data.locale);
+	const i18n = setLocaleContext((() => data.locale)());
 
 	$effect(() => {
 		i18n.locale = data.locale;
@@ -40,12 +40,6 @@
 
 <div class="flex min-h-svh flex-col">
 	<SkipLink {t} />
-	<SeoHead
-		title={t('brand.name')}
-		description={t('seo.description')}
-		locale={data.locale}
-		path={$page.url.pathname.replace(/^\/(en|de)/, '') || '/'}
-	/>
 	<Header locale={data.locale} {user} />
 	<main id="main-content" class="flex-1">
 		<ErrorBoundary>

@@ -15,9 +15,14 @@
 	let locale = $derived($page.params.locale as 'en' | 'de');
 	let t = $derived(createT(locale));
 
-	let posts = $state<Post[]>([...data.items]);
-	let nextCursor = $state<string | null>(data.nextCursor);
+	let posts = $state<Post[]>((() => [...data.items])());
+	let nextCursor = $state<string | null>((() => data.nextCursor)());
 	let loading = $state(false);
+
+	$effect(() => {
+		posts = [...data.items];
+		nextCursor = data.nextCursor;
+	});
 
 	async function loadMore() {
 		if (!nextCursor || loading) return;

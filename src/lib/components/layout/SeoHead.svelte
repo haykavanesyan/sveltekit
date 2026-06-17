@@ -9,8 +9,8 @@
 	} = $props();
 
 	const siteUrl = 'https://example.com';
-	const enPath = path;
-	const dePath = path;
+	let enPath = $derived(path);
+	let dePath = $derived(path);
 </script>
 
 <svelte:head>

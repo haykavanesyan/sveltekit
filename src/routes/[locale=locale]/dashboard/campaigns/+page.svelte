@@ -4,6 +4,7 @@
 	import Search from '$lib/components/composites/Search.svelte';
 	import Select from '$lib/components/primitives/Select.svelte';
 	import DataTable from '$lib/components/composites/DataTable.svelte';
+	import SeoHead from '$lib/components/layout/SeoHead.svelte';
 	import { createT } from '$lib/i18n/runtime.svelte';
 	import { decodeItemsFilter } from '$lib/utils/url-state';
 	import { toast } from '$lib/stores/toast.svelte';
@@ -110,6 +111,13 @@
 		{ value: 'archived', label: t('campaigns.filter.archived') }
 	]);
 </script>
+
+<SeoHead
+	title={t('dashboard.items.title')}
+	description={t('dashboard.description')}
+	locale={locale as string}
+	path="/dashboard/campaigns"
+/>
 
 <Container size="full" class="py-8">
 	<div class="flex items-center justify-between">

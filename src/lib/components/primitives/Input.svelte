@@ -13,8 +13,8 @@
 		onkeydown?: (e: KeyboardEvent) => void;
 	} = $props();
 
-	const inputId = id || name || label?.toLowerCase().replace(/\s+/g, '-');
-	const errorId = inputId + '-error';
+	let inputId = $derived(id || name || label?.toLowerCase().replace(/\s+/g, '-'));
+	let errorId = $derived(inputId + '-error');
 </script>
 
 <div class={['flex flex-col gap-1.5', className].filter(Boolean).join(' ')}>

@@ -1,6 +1,7 @@
 <script lang="ts">
 	import Heading from '$lib/components/primitives/Heading.svelte';
 	import Card from '$lib/components/primitives/Card.svelte';
+	import SeoHead from '$lib/components/layout/SeoHead.svelte';
 	import { createT } from '$lib/i18n/runtime.svelte';
 	import { page } from '$app/stores';
 
@@ -8,8 +9,16 @@
 
 	let locale = $derived($page.params.locale);
 	let t = $derived(createT(locale as 'en' | 'de'));
-	const { totalBudget, totalSpent, activeCount, avgCtr } = data.stats;
+	let stats = $derived(data.stats);
+	let { totalBudget, totalSpent, activeCount, avgCtr } = $derived(stats);
 </script>
+
+<SeoHead
+	title={t('dashboard.title')}
+	description={t('dashboard.description')}
+	locale={locale as string}
+	path="/dashboard"
+/>
 
 <Heading level={1}>{t('dashboard.title')}</Heading>
 <p class="mt-1 text-sm text-fg-muted">{t('dashboard.welcomeBack', { name: data.user.name })}</p>

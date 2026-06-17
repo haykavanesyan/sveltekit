@@ -16,7 +16,7 @@
 		placeholder?: string;
 	} = $props();
 
-	const selectId = id || name || label?.toLowerCase().replace(/\s+/g, '-');
+	let selectId = $derived(id || name || label?.toLowerCase().replace(/\s+/g, '-'));
 
 	let open = $state(false);
 	let triggerEl: HTMLButtonElement;

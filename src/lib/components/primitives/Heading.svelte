@@ -6,7 +6,7 @@
 		children?: import('svelte').Snippet;
 	} = $props();
 
-	const tag = 'h' + level;
+	let tag = $derived('h' + level);
 
 	const sizes: Record<string, string> = {
 		xs: 'text-xs',

@@ -8,7 +8,11 @@
 
 	const t = getT();
 
-	let value = $state(locale);
+	let value = $state((() => locale)());
+
+	$effect(() => {
+		value = locale;
+	});
 
 	function handleChange() {
 		if (!browser || value === locale) return;

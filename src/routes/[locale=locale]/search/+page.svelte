@@ -15,9 +15,15 @@ import { SvelteURLSearchParams } from 'svelte/reactivity';
 	let locale = $derived($page.params.locale as 'en' | 'de');
 	let t = $derived(createT(locale));
 
-	let query = $state(data.query);
-	let activeTag = $state(data.activeTag);
-	let sort = $state(data.sort);
+	let query = $state((() => data.query)());
+	let activeTag = $state((() => data.activeTag)());
+	let sort = $state((() => data.sort)());
+
+	$effect(() => {
+		query = data.query;
+		activeTag = data.activeTag;
+		sort = data.sort;
+	});
 
 	function updateUrl(resetPage = true) {
 		const sp = new SvelteURLSearchParams();
