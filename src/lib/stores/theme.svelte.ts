@@ -17,8 +17,7 @@ function createTheme() {
 		if (saved === 'dark' || saved === 'light') {
 			apply(saved);
 		} else {
-			const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
-			apply(prefersDark ? 'dark' : 'light');
+			apply('light');
 		}
 	}
 
