@@ -1,42 +1,82 @@
-# sv
+# Demo Co. - SvelteKit Full-Stack Application
 
-Everything you need to build a Svelte project, powered by [`sv`](https://github.com/sveltejs/cli).
+A production-grade marketing site + authenticated dashboard built with SvelteKit, TypeScript, and Tailwind CSS.
 
-## Creating a project
+## Stack
 
-If you're seeing this, you've probably already done this step. Congrats!
+- **Framework**: SvelteKit 2 (Svelte 5 runes)
+- **Language**: TypeScript 6
+- **Styling**: Tailwind CSS v4 with design tokens + dark mode
+- **Validation**: Zod (shared client + server)
+- **Testing**: Vitest (unit) + Playwright (E2E + a11y + visual regression)
+- **CI**: GitHub Actions (lint → typecheck → unit → build → E2E → Lighthouse → bundle-size)
 
-```sh
-# create a new project
-npx sv create my-app
-```
+## Quick Start
 
-To recreate this project with the same configuration:
-
-```sh
-# recreate this project
-npx sv@0.16.1 create --template minimal --types ts --install npm _temp
-```
-
-## Developing
-
-Once you've created a project and installed dependencies with `npm install` (or `pnpm install` or `yarn`), start a development server:
-
-```sh
+```bash
+npm install
 npm run dev
-
-# or start the server and open the app in a new browser tab
-npm run dev -- --open
 ```
 
-## Building
+Build for production:
 
-To create a production version of your app:
-
-```sh
+```bash
 npm run build
+npm run preview
 ```
 
-You can preview the production build with `npm run preview`.
+## Demo Login Credentials
 
-> To deploy your app, you may need to install an [adapter](https://svelte.dev/docs/kit/adapters) for your target environment.
+| Role   | Email              | Password  |
+|--------|--------------------|-----------|
+| Admin  | admin@demo.test    | demo1234  |
+| Editor | editor@demo.test   | demo1234  |
+| Viewer | viewer@demo.test   | demo1234  |
+
+## Routes
+
+### Public Surface (Edge)
+
+| Route            | Strategy | Description |
+|------------------|----------|-------------|
+| `/` → `/{locale}` | SSG      | Redirects based on Accept-Language, then landing page |
+| `/{locale}/`      | SSG      | Landing page (hero, features, pricing, social proof) |
+| `/{locale}/blog`  | SSG + cursor load-more | Blog listing, first page pre-rendered |
+| `/{locale}/blog/[slug]` | SSG | Individual article with JSON-LD |
+| `/{locale}/search` | SSR (Edge) | Full-text search with URL-roundtripped filters |
+| `/404`            | Static   | Custom not-found page |
+
+### Authenticated Surface (Node)
+
+| Route                              | Strategy       | Description |
+|------------------------------------|----------------|-------------|
+| `/{locale}/login`                  | SSR (Node)     | Sign-in with shared Zod validation |
+| `/{locale}/dashboard`              | SSR (Node)     | Stats overview (total budget, active campaigns) |
+| `/{locale}/dashboard/campaigns`    | SSR + Streamed | Data table with inline edit, optimistic UI |
+
+## Tests
+
+```bash
+# Unit tests
+npm run test:unit
+
+# E2E tests (requires build first)
+npm run build
+npm run test:e2e
+
+# All checks
+npm run lint
+npm run check
+npm run size
+```
+
+## CI
+
+Every push/PR runs: lint → svelte-check → tsc --noEmit → unit tests → build → Playwright E2E → Lighthouse CI → size-limit.
+
+## Edge / Node Runtime Split
+
+| Runtime | Routes | Rationale |
+|---------|--------|-----------|
+| **Edge** | Public (`/`, `/blog`, `/blog/[slug]`, `/search`) | Lowest cold-start latency, CDN distribution, no Node deps |
+| **Node** | Auth (`/login`), Dashboard (`/dashboard/*`) | Cookie signing, session Map, streaming SSR, form actions |
