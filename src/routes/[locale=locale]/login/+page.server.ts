@@ -5,6 +5,7 @@ import { dev } from '$app/environment';
 import type { Actions, PageServerLoad } from './$types';
 
 export const prerender = false;
+export const config = { runtime: 'nodejs20.x' };
 
 export const load: PageServerLoad = async ({ locals, params }) => {
 	if (locals.user) {
@@ -20,7 +21,10 @@ export const actions: Actions = {
 
 		if (!parsed.success) {
 			const errors = parsed.error.flatten().fieldErrors;
-			return fail(422, { error: errors.email?.[0] || errors.password?.[0] || 'Invalid input', fields: { email: formData.email as string } });
+			return fail(422, {
+				error: errors.email?.[0] || errors.password?.[0] || 'Invalid input',
+				fields: { email: formData.email as string }
+			});
 		}
 
 		const user = verifyCredentials(parsed.data.email, parsed.data.password);
